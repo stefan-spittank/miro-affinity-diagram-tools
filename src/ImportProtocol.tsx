@@ -52,7 +52,7 @@ const Preview = styled.div`
 
 const Sticker = styled.div`
   background-color: #fff9b8;
-  border-radius: 2px;
+  border-radius: 4px;
   padding: 0.5rem;
   margin-bottom: 1.5rem;
   margin-right: 0.5rem;
@@ -126,7 +126,7 @@ function ImportProtocol() {
         {lines.length > 0 ? (
           lines.map((line, index) => (
             <div key={index}>
-              <div>{metaData ? metaData + "-" + index : "#" + index}</div>
+              <strong>{metaData ? metaData + "-" + index : "#" + index}</strong>
               <Sticker>{line}</Sticker>
             </div>
           ))

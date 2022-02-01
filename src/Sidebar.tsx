@@ -5,40 +5,64 @@ import { appId } from "./sharedConsts";
 import styled from "styled-components";
 import IWidget = SDK.IWidget;
 
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 2rem;
+`;
+
 const StickerData = styled.div`
   margin-top: 1rem;
 `;
 
+const StickerContainer = styled.div`
+  max-height: 100%;
+  overflow-y: auto;
+`;
+
+const Sticker = styled.div`
+  background-color: #fff9b8;
+  border-radius: 4px;
+  padding: 0.5rem;
+  margin-bottom: 1.5rem;
+  margin-right: 0.5rem;
+`;
+
+const isProtocolEntryStickers = (widget: IWidget): boolean =>
+  widget.type === "STICKER" && widget.metadata[appId]?.protocolReference;
+
 const Sidebar = () => {
   const [selectedSticker, setSelectedSticker] = useState<IWidget[]>([]);
+
   useEffect(() => {
     miro.addListener("SELECTION_UPDATED", (event) => {
-      setSelectedSticker(
-        event.data.filter(
-          (widget: IWidget) =>
-            widget.type === "STICKER" &&
-            widget.metadata[appId]?.protocolReference
-        )
-      );
-      //console.log("event", selectedSticker);
+      setSelectedSticker(event.data.filter(isProtocolEntryStickers));
     });
+    miro.board.selection
+      .get()
+      .then((widgets) =>
+        setSelectedSticker(widgets.filter(isProtocolEntryStickers))
+      );
   }, []);
 
   return (
-    <div>
+    <Container>
       <div className="cs1 ce12">
         <h1>Affinity Diagram</h1>
         <p>Original protocol reference</p>
       </div>
-      <div>
-        {selectedSticker.map((sticker, index) => (
-          <StickerData key={index}>
-            <strong>{sticker.metadata[appId]?.protocolReference}</strong>
-            <div>{sticker.metadata[appId]?.originalText}</div>
-          </StickerData>
-        ))}
-      </div>
-    </div>
+      <StickerContainer>
+        {selectedSticker.map((sticker: IWidget, index) => {
+          return (
+            <StickerData key={index}>
+              <strong>{sticker.metadata[appId]?.protocolReference}</strong>
+              <Sticker>{sticker.metadata[appId]?.originalText}</Sticker>
+            </StickerData>
+          );
+        })}
+      </StickerContainer>
+    </Container>
   );
 };
 
