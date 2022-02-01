@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const path = require("path");
 const { defineConfig } = require("vite");
 const mkcert = require("vite-plugin-mkcert").default;

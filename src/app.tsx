@@ -23,7 +23,7 @@ function App() {
       </div>
       <div className="cs1 ce12">
         <h1>Congratulations!</h1>
-        <p>You've just created your first Miro app!</p>
+        <p>You&aposve just created your first Miro app!</p>
         <p>
           To explore more and build your own app, see the Miro Developer
           Platform documentation.
@@ -34,6 +34,7 @@ function App() {
           className="button button-primary"
           target="_blank"
           href="https://developers.miro.com/docs/welcome"
+          rel="noreferrer"
         >
           Read the documentation
         </a>
