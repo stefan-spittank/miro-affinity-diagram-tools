@@ -1,17 +1,18 @@
-import * as React from 'react';
-import ReactDOM from 'react-dom';
+import * as React from "react";
+import ReactDOM from "react-dom";
+import { useEffect } from "react";
 
 async function init() {
   const [sticker] = await miro.board.widgets.create({
-    type: 'sticker',
-    text: 'Hello, World!',
+    type: "sticker",
+    text: "Hello, World!",
   });
 
   await miro.board.viewport.zoomToObject(sticker);
 }
 
 function App() {
-  React.useEffect(() => {
+  useEffect(() => {
     init();
   }, []);
 
@@ -41,4 +42,4 @@ function App() {
   );
 }
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById("root"));
