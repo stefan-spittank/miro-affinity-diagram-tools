@@ -73,22 +73,26 @@ function ImportProtocol() {
   const addWidgets = async () => {
     const startY = 0;
     const startX = 0;
-    const widgetHeight = 200;
+    const widgetSize = 220;
     const columns = lines.length > 0 ? Math.ceil(Math.sqrt(lines.length)) : 0;
 
     const newWidgets = await miro.board.widgets.create(
-      lines.map((line, index) => ({
-        type: "sticker",
-        text: line,
-        x: 0,
-        y: startY + index * widgetHeight,
-        metadata: {
-          [appId]: {
-            protocolReference: metaData + "-" + index,
-            originalText: line,
+      lines.map((line, index) => {
+        const column = Math.floor(index / columns);
+        const row = index % columns;
+        return {
+          type: "sticker",
+          text: line,
+          x: startX + row * widgetSize,
+          y: startY + column * widgetSize,
+          metadata: {
+            [appId]: {
+              protocolReference: metaData + "-" + index,
+              originalText: line,
+            },
           },
-        },
-      }))
+        };
+      })
     );
     await miro.board.selection.selectWidgets(newWidgets);
 
