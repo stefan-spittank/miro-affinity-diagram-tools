@@ -2,15 +2,6 @@
 /* eslint-disable */
 
 /**
- * Start here
- */
-declare global {
-  var miro: SDK.Root;
-}
-
-export {};
-
-/**
  * Here you will find a full reference to all publicly available methods in
  * the Miro SDK for web plugins development.
  *
@@ -1447,7 +1438,7 @@ declare namespace SDK {
    * Defines a basic widget and its properties
    * @category Widgets Manipulation
    */
-  interface IWidget extends IWidgetNamespaces {
+  export interface IWidget extends IWidgetNamespaces {
     readonly id: string;
     readonly type: string;
     readonly bounds: IBounds;
