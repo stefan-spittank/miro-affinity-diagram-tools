@@ -22,6 +22,10 @@ body {
   padding: 2rem;
 }
 
+#root {
+  height: 100%;
+}
+
 .container {
   max-width: 580px;
   margin: 0 auto;
