@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
 import { appId } from "./sharedConsts";
+import IBounds = SDK.IBounds;
+import IRect = SDK.IRect;
 
 const Input = styled.input`
   font-family: var(--body-font);
@@ -58,6 +60,9 @@ const Sticker = styled.div`
   margin-right: 0.5rem;
 `;
 
+const getEntryReferenceString = (metaData: string, index: number) =>
+  metaData ? metaData + "-" + index : "#" + index;
+
 function ImportProtocol() {
   const [protocolText, setProtocolText] = useState("");
   const [metaData, setMetaData] = useState("");
@@ -71,8 +76,10 @@ function ImportProtocol() {
   }, [protocolText, setLines]);
 
   const addWidgets = async () => {
-    const startY = 0;
-    const startX = 0;
+    const viewport = await miro.board.viewport.get();
+
+    const startY = viewport.y + 110;
+    const startX = viewport.x + 110;
     const widgetSize = 220;
     const columns = lines.length > 0 ? Math.ceil(Math.sqrt(lines.length)) : 0;
 
@@ -87,15 +94,41 @@ function ImportProtocol() {
           y: startY + column * widgetSize,
           metadata: {
             [appId]: {
-              protocolReference: metaData + "-" + index,
+              protocolReference: getEntryReferenceString(metaData, index),
               originalText: line,
             },
           },
         };
       })
     );
+    if (metaData) {
+      const existingTags = await miro.board.tags.get({ title: metaData });
+      if (existingTags && existingTags.length > 0) {
+        const existingTag = existingTags[0];
+        miro.board.tags.update({
+          ...existingTag,
+          widgetIds: [
+            ...existingTag.widgetIds,
+            ...newWidgets.map((widget) => widget.id),
+          ],
+        });
+      } else {
+        miro.board.tags.create({
+          title: metaData,
+          color: "#F24726",
+          widgetIds: newWidgets,
+        });
+      }
+    }
     await miro.board.selection.selectWidgets(newWidgets);
-
+    const yOffset = -100;
+    const widgetsBounds: IRect = {
+      x: startX,
+      y: startY + yOffset,
+      width: columns * widgetSize,
+      height: columns * widgetSize,
+    };
+    await miro.board.viewport.set(widgetsBounds);
     await miro.board.ui.closeLibrary();
     await miro.showNotification(lines.length + " sticker created");
   };
@@ -126,7 +159,7 @@ function ImportProtocol() {
         {lines.length > 0 ? (
           lines.map((line, index) => (
             <div key={index}>
-              <strong>{metaData ? metaData + "-" + index : "#" + index}</strong>
+              <strong>{getEntryReferenceString(metaData, index)}</strong>
               <Sticker>{line}</Sticker>
             </div>
           ))
