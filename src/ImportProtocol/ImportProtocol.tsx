@@ -11,7 +11,6 @@ import {
   Textarea,
 } from "./ImportProtocol.styles";
 import { getEntryReferenceString } from "./ImportProtocol.helper";
-import IRect = SDK.IRect;
 
 const ImportProtocol = () => {
   const [protocolText, setProtocolText] = useState("");
@@ -72,7 +71,7 @@ const ImportProtocol = () => {
     }
     await miro.board.selection.selectWidgets(newWidgets);
     const yOffset = -100;
-    const widgetsBounds: IRect = {
+    const widgetsBounds: SDK.IRect = {
       x: startX,
       y: startY + yOffset,
       width: columns * widgetSize,
