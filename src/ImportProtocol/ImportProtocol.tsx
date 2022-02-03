@@ -1,69 +1,18 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import ReactDOM from "react-dom";
-import styled from "styled-components";
-import { appId } from "./sharedConsts";
-import IBounds = SDK.IBounds;
-import IRect = SDK.IRect;
+import { appId } from "../sharedConsts";
+import {
+  Button,
+  Container,
+  Input,
+  Preview,
+  Protocol,
+  Sticker,
+  Textarea,
+} from "./ImportProtocol.styles";
+import { getEntryReferenceString } from "./ImportProtocol.helper";
 
-const Input = styled.input`
-  font-family: var(--body-font);
-  font-size: 1rem;
-  padding: 0.25rem;
-  border-radius: 0;
-  border: 1px solid lightgrey;
-  width: 100%;
-`;
-
-const Textarea = styled.textarea`
-  width: 100%;
-  height: 2rem;
-  font-family: var(--body-font);
-  font-size: 1rem;
-  padding: 0.25rem;
-  border-radius: 0;
-  border: 1px solid lightgrey;
-`;
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  gap: 2rem;
-`;
-const Protocol = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const Button = styled.button`
-  font-family: var(--body-font);
-  font-size: 1rem;
-  padding: 14px;
-  border-color: rgba(66, 98, 255, 1);
-  border-color: var(--blue700);
-  background-color: rgba(66, 98, 255, 1);
-  background-color: var(--blue700);
-  border-radius: var(--radiusM);
-`;
-
-const Preview = styled.div`
-  max-height: 100%;
-  overflow-y: auto;
-`;
-
-const Sticker = styled.div`
-  background-color: #fff9b8;
-  border-radius: 4px;
-  padding: 0.5rem;
-  margin-bottom: 1.5rem;
-  margin-right: 0.5rem;
-`;
-
-const getEntryReferenceString = (metaData: string, index: number) =>
-  metaData ? metaData + "-" + index : "#" + index;
-
-function ImportProtocol() {
+const ImportProtocol = () => {
   const [protocolText, setProtocolText] = useState("");
   const [metaData, setMetaData] = useState("");
   const [lines, setLines] = useState<string[]>([]);
@@ -94,7 +43,7 @@ function ImportProtocol() {
           y: startY + column * widgetSize,
           metadata: {
             [appId]: {
-              protocolReference: getEntryReferenceString(metaData, index),
+              protocolReference: getEntryReferenceString(index, metaData),
               originalText: line,
             },
           },
@@ -122,7 +71,7 @@ function ImportProtocol() {
     }
     await miro.board.selection.selectWidgets(newWidgets);
     const yOffset = -100;
-    const widgetsBounds: IRect = {
+    const widgetsBounds: SDK.IRect = {
       x: startX,
       y: startY + yOffset,
       width: columns * widgetSize,
@@ -159,7 +108,7 @@ function ImportProtocol() {
         {lines.length > 0 ? (
           lines.map((line, index) => (
             <div key={index}>
-              <strong>{getEntryReferenceString(metaData, index)}</strong>
+              <strong>{getEntryReferenceString(index, metaData)}</strong>
               <Sticker>{line}</Sticker>
             </div>
           ))
@@ -170,6 +119,6 @@ function ImportProtocol() {
       <Button onClick={addWidgets}>Create sticker</Button>
     </Container>
   );
-}
+};
 
-ReactDOM.render(<ImportProtocol />, document.getElementById("root"));
+export default ImportProtocol;
