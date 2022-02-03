@@ -15,7 +15,9 @@ miroInstance.onReady(async () => {
         title: "Affinity Diagram: show source information",
         svgIcon: toolbarIcon,
         onClick: async () => {
-          miroInstance.board.ui.openLeftSidebar("sidebar.html");
+          await miroInstance.board.ui.openLeftSidebar(
+            "src/ShowProtocolReference/ShowProtocolReference.html"
+          );
         },
       },
       toolbar: {
@@ -24,9 +26,12 @@ miroInstance.onReady(async () => {
         librarySvgIcon: libraryIcon,
         async onClick() {
           // Remember that 'app.html' resolves relative to index.js file. So app.html have to be in the /dist/ folder.
-          await miroInstance.board.ui.openLibrary("ImportProtocol.html", {
-            title: "Import protocol",
-          });
+          await miroInstance.board.ui.openLibrary(
+            "src/ImportProtocol/ImportProtocol.html",
+            {
+              title: "Import protocol",
+            }
+          );
         },
       },
     },
