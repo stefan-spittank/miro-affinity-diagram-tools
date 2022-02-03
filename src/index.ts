@@ -15,7 +15,7 @@ miroInstance.onReady(async () => {
         title: "Affinity Diagram: show source information",
         svgIcon: toolbarIcon,
         onClick: async () => {
-          miroInstance.board.ui.openLeftSidebar(
+          await miroInstance.board.ui.openLeftSidebar(
             "src/ShowProtocolReference/ShowProtocolReference.html"
           );
         },

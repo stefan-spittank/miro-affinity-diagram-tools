@@ -49,4 +49,49 @@ describe("index file", () => {
       })
     );
   });
+
+  it("should open the ShowProtocolReference view in the leftSidebar onClick of the bottomBar Button", async () => {
+    let initParams: Partial<SDK.IPluginConfig>;
+    (miroInstance.initialize as jest.Mock).mockImplementation(
+      (initParamsGiven) => {
+        initParams = initParamsGiven;
+      }
+    );
+    await (miroInstance as unknown as MockMiro)._triggerOnReady();
+
+    // 2 warnings:
+    // 1. initParams ist hier im Test sicher gesetzt
+    // 2. onClick ist in den Typen von miro falsch
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    await initParams?.extensionPoints?.bottomBar?.onClick();
+
+    expect(miroInstance.board.ui.openLeftSidebar).toHaveBeenCalledWith(
+      "src/ShowProtocolReference/ShowProtocolReference.html"
+    );
+  });
+
+  it("should open the ImportProtocol view as library onClick of the toolbar Button", async () => {
+    let initParams: Partial<SDK.IPluginConfig>;
+    (miroInstance.initialize as jest.Mock).mockImplementation(
+      (initParamsGiven) => {
+        initParams = initParamsGiven;
+      }
+    );
+    await (miroInstance as unknown as MockMiro)._triggerOnReady();
+
+    // 2 warnings:
+    // 1. initParams ist hier im Test sicher gesetzt
+    // 2. onClick ist in den Typen von miro falsch
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    await initParams?.extensionPoints?.toolbar?.onClick();
+
+    expect(miroInstance.board.ui.openLibrary).toHaveBeenCalledWith(
+      "src/ImportProtocol/ImportProtocol.html",
+      {
+        title: "Import protocol",
+      }
+    );
+  });
 });

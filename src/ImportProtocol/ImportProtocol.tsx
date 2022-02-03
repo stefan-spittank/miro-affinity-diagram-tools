@@ -32,7 +32,7 @@ const ImportProtocol = () => {
     const startY = viewport.y + 110;
     const startX = viewport.x + 110;
     const widgetSize = 220;
-    const columns = lines.length > 0 ? Math.ceil(Math.sqrt(lines.length)) : 0;
+    const columns = Math.ceil(Math.sqrt(lines.length));
 
     const widgetToBeCreated = lines.map((line, index) => {
       const column = Math.floor(index / columns);
@@ -121,7 +121,9 @@ const ImportProtocol = () => {
           <div>No content</div>
         )}
       </Preview>
-      <Button onClick={addWidgets}>Create sticker</Button>
+      <Button onClick={addWidgets} disabled={lines.length < 1}>
+        Create sticker
+      </Button>
     </Container>
   );
 };

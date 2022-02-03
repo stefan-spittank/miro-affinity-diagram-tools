@@ -104,6 +104,16 @@ describe("ImportProtocol", () => {
     }
   );
 
+  it("should not create any widgets without a protocol", async () => {
+    const { user } = setupUserEventAndRender(<ImportProtocol />);
+
+    const createButton = screen.getByRole("button", { name: "Create sticker" });
+    await user.click(createButton);
+
+    expect(createButton).toBeDisabled();
+    expect(mockMiroInst.board.widgets.create).not.toHaveBeenCalled();
+  });
+
   it("should create a widget for each line of the protocol", async () => {
     const { user } = setupUserEventAndRender(<ImportProtocol />);
 

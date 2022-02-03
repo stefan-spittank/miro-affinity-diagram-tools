@@ -6,6 +6,7 @@
   "scripts": {
     "start": "vite",
     "test": "jest",
+    "test:coverage": "jest --coverage",
     "build": "vite build",
     "serve": "vite preview",
     "lint": "eslint --ext .ts,.tsx,.js .",
