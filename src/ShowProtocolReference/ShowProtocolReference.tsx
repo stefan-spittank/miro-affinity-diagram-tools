@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
-import { appId } from "./sharedConsts";
+import { appId } from "../sharedConsts";
 import styled from "styled-components";
 import IWidget = SDK.IWidget;
 
@@ -32,7 +32,7 @@ const Sticker = styled.div`
 const isProtocolEntryStickers = (widget: IWidget): boolean =>
   widget.type === "STICKER" && widget.metadata[appId]?.protocolReference;
 
-const Sidebar = () => {
+const ShowProtocolReference = () => {
   const [selectedSticker, setSelectedSticker] = useState<IWidget[]>([]);
 
   useEffect(() => {
@@ -66,4 +66,4 @@ const Sidebar = () => {
   );
 };
 
-ReactDOM.render(<Sidebar />, document.getElementById("root"));
+ReactDOM.render(<ShowProtocolReference />, document.getElementById("root"));
