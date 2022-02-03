@@ -11,6 +11,7 @@ import {
   Textarea,
 } from "./ImportProtocol.styles";
 import { getEntryReferenceString } from "./ImportProtocol.helper";
+import { getMiroInstance } from "../miroInstance";
 
 const ImportProtocol = () => {
   const [protocolText, setProtocolText] = useState("");
@@ -23,38 +24,42 @@ const ImportProtocol = () => {
       setLines([]);
     }
   }, [protocolText, setLines]);
+  const miroInstance = getMiroInstance();
 
   const addWidgets = async () => {
-    const viewport = await miro.board.viewport.get();
+    const viewport = await miroInstance.board.viewport.get();
 
     const startY = viewport.y + 110;
     const startX = viewport.x + 110;
     const widgetSize = 220;
     const columns = lines.length > 0 ? Math.ceil(Math.sqrt(lines.length)) : 0;
 
-    const newWidgets = await miro.board.widgets.create(
-      lines.map((line, index) => {
-        const column = Math.floor(index / columns);
-        const row = index % columns;
-        return {
-          type: "sticker",
-          text: line,
-          x: startX + row * widgetSize,
-          y: startY + column * widgetSize,
-          metadata: {
-            [appId]: {
-              protocolReference: getEntryReferenceString(index, metaData),
-              originalText: line,
-            },
+    const widgetToBeCreated = lines.map((line, index) => {
+      const column = Math.floor(index / columns);
+      const row = index % columns;
+      return {
+        type: "sticker",
+        text: line,
+        x: startX + row * widgetSize,
+        y: startY + column * widgetSize,
+        metadata: {
+          [appId]: {
+            protocolReference: getEntryReferenceString(index, metaData),
+            originalText: line,
           },
-        };
-      })
+        },
+      };
+    });
+    const newWidgets = await miroInstance.board.widgets.create(
+      widgetToBeCreated
     );
     if (metaData) {
-      const existingTags = await miro.board.tags.get({ title: metaData });
+      const existingTags = await miroInstance.board.tags.get({
+        title: metaData,
+      });
       if (existingTags && existingTags.length > 0) {
         const existingTag = existingTags[0];
-        miro.board.tags.update({
+        miroInstance.board.tags.update({
           ...existingTag,
           widgetIds: [
             ...existingTag.widgetIds,
@@ -62,14 +67,14 @@ const ImportProtocol = () => {
           ],
         });
       } else {
-        miro.board.tags.create({
+        miroInstance.board.tags.create({
           title: metaData,
           color: "#F24726",
           widgetIds: newWidgets,
         });
       }
     }
-    await miro.board.selection.selectWidgets(newWidgets);
+    await miroInstance.board.selection.selectWidgets(newWidgets);
     const yOffset = -100;
     const widgetsBounds: SDK.IRect = {
       x: startX,
@@ -77,9 +82,9 @@ const ImportProtocol = () => {
       width: columns * widgetSize,
       height: columns * widgetSize,
     };
-    await miro.board.viewport.set(widgetsBounds);
-    await miro.board.ui.closeLibrary();
-    await miro.showNotification(lines.length + " sticker created");
+    await miroInstance.board.viewport.set(widgetsBounds);
+    await miroInstance.board.ui.closeLibrary();
+    await miroInstance.showNotification(lines.length + " sticker created");
   };
 
   return (
@@ -88,7 +93,7 @@ const ImportProtocol = () => {
       <div>
         <label htmlFor="protocolPrefix">Protocol reference prefix</label>
         <Input
-          name="protocolPrefix"
+          id="protocolPrefix"
           value={metaData}
           onChange={(event) => setMetaData(event.target.value)}
         />
@@ -96,7 +101,7 @@ const ImportProtocol = () => {
       <Protocol>
         <label htmlFor="protocolEntries">Paste the protocol below</label>
         <Textarea
-          name="protocolEntries"
+          id="protocolEntries"
           value={protocolText}
           onChange={(event) => {
             setProtocolText(event.target.value);

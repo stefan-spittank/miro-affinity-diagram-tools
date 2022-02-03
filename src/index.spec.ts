@@ -1,16 +1,5 @@
 import { miroInstance } from "./index";
-
-// We mock only the parts of miro we need
-// For DeepPartial see: https://stackoverflow.com/a/61132308
-type DeepPartial<T> = T extends object
-  ? {
-      [P in keyof T]?: DeepPartial<T[P]>;
-    }
-  : T;
-
-type MockMiro = DeepPartial<SDK.Root> & {
-  _triggerOnReady: () => void;
-};
+import { MockMiro } from "../testHelper/mockMiro";
 
 jest.mock("./miroInstance", () => ({
   getMiroInstance: jest.fn((): MockMiro => {
