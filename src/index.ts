@@ -16,12 +16,12 @@ miroInstance.onReady(async () => {
         title: "Affinity Diagram: show source information",
         svgIcon: toolbarIcon,
         onClick: async () => {
-          // const isAuthorized = await miro.isAuthorized();
-          //
-          // if (!isAuthorized) {
-          //   // Ask the user to authorize the app.
-          //   await miro.requestAuthorization();
-          // }
+          const isAuthorized = await miro.isAuthorized();
+
+          if (!isAuthorized) {
+            // Ask the user to authorize the app.
+            await miro.requestAuthorization();
+          }
 
           await miroInstance.board.ui.openLeftSidebar(
             "src/ShowProtocolReference/ShowProtocolReference.html"
@@ -33,12 +33,12 @@ miroInstance.onReady(async () => {
         toolbarSvgIcon: toolbarIcon,
         librarySvgIcon: libraryIcon,
         async onClick() {
-          // const isAuthorized = await miro.isAuthorized();
-          //
-          // if (!isAuthorized) {
-          //   // Ask the user to authorize the app.
-          //   await miro.requestAuthorization();
-          // }
+          const isAuthorized = await miro.isAuthorized();
+
+          if (!isAuthorized) {
+            // Ask the user to authorize the app.
+            await miro.requestAuthorization();
+          }
 
           // Remember that 'app.html' resolves relative to index.js file. So app.html have to be in the /dist/ folder.
           await miroInstance.board.ui.openLibrary(
