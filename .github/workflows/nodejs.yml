@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "test env"
-        run: echo ${{ secrets.MIRO_APP_ID }}
+        run: echo ${{ secrets.VITE_MIRO_APP_ID }}
 
   build:
 

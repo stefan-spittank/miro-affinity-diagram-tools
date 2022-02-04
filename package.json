@@ -11,7 +11,7 @@
     "serve": "vite preview",
     "lint": "eslint --ext .ts,.tsx,.js .",
     "lint:fix": "eslint --fix --ext .ts,.tsx,.js .",
-    "predeploy": "vite build",
+    "predeploy": "vite build --base /miro-affinity-diagram-tools/",
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
