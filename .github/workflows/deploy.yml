@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Deployment
 
 on:
   push:
@@ -28,3 +28,5 @@ jobs:
 
       - name: Deploy project
         run: yarn deploy
+        env:
+          VITE_MIRO_APP_ID: ${{ secrets.VITE_MIRO_APP_ID }}
