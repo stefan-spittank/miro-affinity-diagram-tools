@@ -50,9 +50,15 @@ const ImportProtocol = () => {
         },
       };
     });
-    const newWidgets = await miroInstance.board.widgets.create(
-      widgetToBeCreated
-    );
+    let newWidgets: SDK.IWidget[] = [];
+    try {
+      newWidgets = await miroInstance.board.widgets.create(widgetToBeCreated);
+    } catch (e) {
+      await miroInstance.showErrorNotification(
+        "Could not create widgets. Error: " + JSON.stringify(e)
+      );
+      await miroInstance.board.ui.closeLibrary();
+    }
     if (metaData) {
       const existingTags = await miroInstance.board.tags.get({
         title: metaData,
