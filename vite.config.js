@@ -10,6 +10,7 @@ module.exports = defineConfig({
     rollupOptions: {
       input: {
         index: path.resolve(__dirname, "index.html"),
+        overview: path.resolve(__dirname, "src/Overview/Overview.html"),
         app: path.resolve(__dirname, "src/ImportProtocol/ImportProtocol.html"),
         sidebar: path.resolve(
           __dirname,

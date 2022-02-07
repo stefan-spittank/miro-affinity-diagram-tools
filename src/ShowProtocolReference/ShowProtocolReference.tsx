@@ -22,25 +22,28 @@ const ShowProtocolReference = () => {
     miroInstance.board.selection
       .get()
       .then((widgets) =>
-        setSelectedSticker(widgets.filter(isProtocolEntryStickers))
+        setSelectedSticker(widgets.filter(isProtocolEntryStickers) || [])
       );
   }, []);
 
   return (
     <Container>
       <div className="cs1 ce12">
-        <h1>Affinity Diagram</h1>
-        <p>Original protocol reference</p>
+        <h2>View original interview minutes</h2>
       </div>
       <StickerContainer>
-        {selectedSticker.map((sticker: SDK.IWidget, index) => {
-          return (
-            <StickerData key={index}>
-              <strong>{sticker.metadata[appId]?.protocolReference}</strong>
-              <Sticker>{sticker.metadata[appId]?.originalText}</Sticker>
-            </StickerData>
-          );
-        })}
+        {selectedSticker.length > 0 ? (
+          selectedSticker.map((sticker: SDK.IWidget, index) => {
+            return (
+              <StickerData key={index}>
+                <strong>{sticker.metadata[appId]?.protocolReference}</strong>
+                <Sticker>{sticker.metadata[appId]?.originalText}</Sticker>
+              </StickerData>
+            );
+          })
+        ) : (
+          <p className="p-medium">No interview sticker selected</p>
+        )}
       </StickerContainer>
     </Container>
   );
