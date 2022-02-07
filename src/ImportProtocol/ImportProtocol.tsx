@@ -137,6 +137,14 @@ const ImportProtocol = () => {
       >
         Create sticker
       </button>
+      <button
+        className="button button-secondary"
+        onClick={async () => {
+          await miroInstance.board.ui.closeModal();
+        }}
+      >
+        Cancel
+      </button>
     </Container>
   );
 };

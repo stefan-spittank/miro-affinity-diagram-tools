@@ -7,11 +7,12 @@ const Overview = () => {
     <>
       <h1>Affinity Diagram Tools</h1>
       <p className="p-medium">
-        This miro plugin helps you, importing notes from your user interviews,
-        to be able to create an affinity diagram in a shared interpretation
-        session. Optionally you can assign a user code to each interview you are
-        importing. This could be helpful to easily identify the source interview
-        in future discussions.
+        This miro plugin is intended for people doing user interviews (User
+        Experience Designers, Requirements Engineers,...). It helps importing
+        notes from your user interviews, to be able to create an affinity
+        diagram in a shared interpretation session. Optionally you can assign a
+        user code to each interview you are importing. This could be helpful to
+        easily identify the source interview in future discussions.
       </p>
 
       <h2>Import minutes</h2>
@@ -31,7 +32,7 @@ const Overview = () => {
           await miroInstance.board.ui.closeLeftSidebar();
         }}
       >
-        Import minutes and create stickers
+        Import minutes
       </button>
       <h2>Review the orginal minutes</h2>
       <p className="p-medium">
