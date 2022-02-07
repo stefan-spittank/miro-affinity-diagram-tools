@@ -1,4 +1,4 @@
-import{g as d}from"./miroInstance.b01b0cd8.js";import{s as n,r as e,R as p}from"./vendor.836cfe6a.js";import{a}from"./sharedConsts.98c66354.js";const f=n.div`
+import{a,g as d}from"./sharedConsts.efdedf22.js";import{s as n,r as e,R as p}from"./vendor.836cfe6a.js";const f=n.div`
   display: flex;
   flex-direction: column;
   height: 100%;
