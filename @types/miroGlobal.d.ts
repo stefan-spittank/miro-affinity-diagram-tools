@@ -6,6 +6,7 @@ declare global {
   interface ImportMeta {
     env: {
       VITE_MIRO_APP_ID: string;
+      DEV: boolean;
     };
   }
 }

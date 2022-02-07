@@ -2,7 +2,6 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { appId } from "../sharedConsts";
 import {
-  Button,
   Container,
   Input,
   Preview,
@@ -127,9 +126,13 @@ const ImportProtocol = () => {
           <div>No content</div>
         )}
       </Preview>
-      <Button onClick={addWidgets} disabled={lines.length < 1}>
+      <button
+        className="button button-primary"
+        onClick={addWidgets}
+        disabled={lines.length < 1}
+      >
         Create sticker
-      </Button>
+      </button>
     </Container>
   );
 };

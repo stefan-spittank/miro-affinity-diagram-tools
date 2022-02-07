@@ -1,7 +1,5 @@
 import toolbarIcon from "./assets/SourceInformation.svg?raw";
-import libraryIcon from "./assets/affinity-diagram.svg?raw";
-import { getMiroInstance } from "./miroInstance";
-import { appId } from "./sharedConsts";
+import {getMiroInstance} from "./miroInstance";
 
 // https://developers.miro.com/docs/web-plugins-features
 
@@ -13,7 +11,9 @@ miroInstance.onReady(async () => {
   miroInstance.initialize({
     extensionPoints: {
       bottomBar: {
-        title: "Affinity Diagram: show source information",
+        title: import.meta.env.DEV
+          ? "(DEV) "
+          : "" + "Affinity Diagram: show source information",
         svgIcon: toolbarIcon,
         onClick: async () => {
           const isAuthorized = await miro.isAuthorized();
@@ -29,9 +29,11 @@ miroInstance.onReady(async () => {
         },
       },
       toolbar: {
-        title: "Affinity Diagram: import protocol",
+        title: import.meta.env.DEV
+          ? "(DEV) "
+          : "" + "Affinity Diagram: import protocol",
         toolbarSvgIcon: toolbarIcon,
-        librarySvgIcon: libraryIcon,
+        librarySvgIcon: toolbarIcon,
         async onClick() {
           const isAuthorized = await miro.isAuthorized();
 
