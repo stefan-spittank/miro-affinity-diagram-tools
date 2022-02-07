@@ -16,7 +16,7 @@ const mockMiroInst = {
       selectWidgets: jest.fn(),
     },
     ui: {
-      closeLibrary: jest.fn(),
+      closeModal: jest.fn(),
     },
     viewport: {
       get: jest.fn(),
@@ -51,7 +51,7 @@ describe("ImportProtocol", () => {
   it("should render the header", () => {
     setupUserEventAndRender(<ImportProtocol />);
     expect(
-      screen.getByText("Create stickers from your recent protocol")
+      screen.getByText("Create stickers for your recent user interview")
     ).toBeVisible();
   });
 
@@ -77,10 +77,7 @@ describe("ImportProtocol", () => {
       screen.getByLabelText("Paste the protocol below").focus();
       await user.paste(testProtocolLines.join("\n"));
       const metaData = "SSP-IVE";
-      await user.type(
-        screen.getByLabelText("Protocol reference prefix"),
-        metaData
-      );
+      await user.type(screen.getByLabelText("User Code (optional)"), metaData);
 
       testProtocolLines.forEach((_, index) =>
         expect(screen.getByText(`${metaData}-${index + 1}`)).toBeVisible()
@@ -132,6 +129,24 @@ describe("ImportProtocol", () => {
     );
   });
 
+  it("should not create a widget for an empty line of the protocol", async () => {
+    const { user } = setupUserEventAndRender(<ImportProtocol />);
+
+    const testProtocolLines = ["First line", "", "Third line"];
+    screen.getByLabelText("Paste the protocol below").focus();
+    await user.paste(testProtocolLines.join("\n"));
+    await user.click(screen.getByRole("button", { name: "Create sticker" }));
+
+    expect(mockMiroInst.board.widgets.create).not.toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({
+          text: "",
+          type: "sticker",
+        }),
+      ])
+    );
+  });
+
   it("should add the original text to the widgets metadata", async () => {
     const { user } = setupUserEventAndRender(<ImportProtocol />);
 
@@ -139,10 +154,7 @@ describe("ImportProtocol", () => {
     screen.getByLabelText("Paste the protocol below").focus();
     await user.paste(testProtocolLines.join("\n"));
     const metaData = "SSP-IVE";
-    await user.type(
-      screen.getByLabelText("Protocol reference prefix"),
-      metaData
-    );
+    await user.type(screen.getByLabelText("User Code (optional)"), metaData);
     await user.click(screen.getByRole("button", { name: "Create sticker" }));
 
     expect(mockMiroInst.board.widgets.create).toHaveBeenCalledWith(
@@ -168,10 +180,7 @@ describe("ImportProtocol", () => {
     await user.paste(testProtocolLines.join("\n"));
 
     const metaData = "SSP-IVE";
-    await user.type(
-      screen.getByLabelText("Protocol reference prefix"),
-      metaData
-    );
+    await user.type(screen.getByLabelText("User Code (optional)"), metaData);
     await user.click(screen.getByRole("button", { name: "Create sticker" }));
 
     expect(mockMiroInst.board.tags.create).toHaveBeenCalledWith({
@@ -201,10 +210,7 @@ describe("ImportProtocol", () => {
     screen.getByLabelText("Paste the protocol below").focus();
     await user.paste(testProtocolLines.join("\n"));
 
-    await user.type(
-      screen.getByLabelText("Protocol reference prefix"),
-      metaData
-    );
+    await user.type(screen.getByLabelText("User Code (optional)"), metaData);
     await user.click(screen.getByRole("button", { name: "Create sticker" }));
 
     expect(mockMiroInst.board.tags.create).not.toHaveBeenCalledWith();

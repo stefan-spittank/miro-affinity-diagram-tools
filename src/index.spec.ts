@@ -6,17 +6,24 @@ jest.mock("./miroInstance", () => ({
     let readyCallBack: () => void = jest.fn();
 
     return {
+      isAuthorized: jest.fn(() => true),
+      requestAuthorization: jest.fn(),
       onReady: jest.fn((value: () => void) => (readyCallBack = value)),
       initialize: jest.fn(),
       board: {
         ui: {
           openLeftSidebar: jest.fn(),
-          openLibrary: jest.fn(),
+          openModal: jest.fn(),
         },
       },
       _triggerOnReady: () => readyCallBack(),
     };
   }),
+}));
+
+jest.mock("./sharedConsts", () => ({
+  ...jest.requireActual("./sharedConsts"),
+  IS_DEV_MODE: false,
 }));
 
 jest.mock("./assets/SourceInformation.svg", () => ({
@@ -27,6 +34,13 @@ jest.mock("./assets/affinity-diagram.svg", () => ({
 }));
 
 describe("index file", () => {
+  beforeEach(() => {
+    (miroInstance.isAuthorized as jest.Mock).mockReturnValue(true);
+  });
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it("should register for miro.onReady event", () => {
     expect(miroInstance.onReady).toHaveBeenCalled();
   });
@@ -71,6 +85,27 @@ describe("index file", () => {
     );
   });
 
+  it("should request authorization if not authorized", async () => {
+    let initParams: Partial<SDK.IPluginConfig>;
+    (miroInstance.initialize as jest.Mock).mockImplementation(
+      (initParamsGiven) => {
+        initParams = initParamsGiven;
+      }
+    );
+    await (miroInstance as unknown as MockMiro)._triggerOnReady();
+
+    (miroInstance.isAuthorized as jest.Mock).mockReturnValue(false);
+
+    // 2 warnings:
+    // 1. initParams ist hier im Test sicher gesetzt
+    // 2. onClick ist in den Typen von miro falsch
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    await initParams?.extensionPoints?.bottomBar?.onClick();
+
+    expect(miroInstance.requestAuthorization).toHaveBeenCalled();
+  });
+
   it("should open the ImportProtocol view as library onClick of the toolbar Button", async () => {
     let initParams: Partial<SDK.IPluginConfig>;
     (miroInstance.initialize as jest.Mock).mockImplementation(
@@ -87,10 +122,10 @@ describe("index file", () => {
     // @ts-ignore
     await initParams?.extensionPoints?.toolbar?.onClick();
 
-    expect(miroInstance.board.ui.openLibrary).toHaveBeenCalledWith(
+    expect(miroInstance.board.ui.openModal).toHaveBeenCalledWith(
       "src/ImportProtocol/ImportProtocol.html",
       {
-        title: "Import protocol",
+        fullscreen: true,
       }
     );
   });

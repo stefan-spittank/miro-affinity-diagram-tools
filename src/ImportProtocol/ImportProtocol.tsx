@@ -1,24 +1,18 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { appId } from "../sharedConsts";
-import {
-  Container,
-  Input,
-  Preview,
-  Protocol,
-  Sticker,
-  Textarea,
-} from "./ImportProtocol.styles";
+import { Container, Preview, Protocol, Sticker } from "./ImportProtocol.styles";
 import { getEntryReferenceString } from "./ImportProtocol.helper";
 import { getMiroInstance } from "../miroInstance";
 
 const ImportProtocol = () => {
   const [protocolText, setProtocolText] = useState("");
   const [metaData, setMetaData] = useState("");
+  const [isCreating, setIsCreating] = useState(false);
   const [lines, setLines] = useState<string[]>([]);
   useEffect(() => {
     if (protocolText) {
-      setLines(protocolText.split(/\r?\n/));
+      setLines(protocolText.split(/\r?\n/).filter((line) => line !== ""));
     } else {
       setLines([]);
     }
@@ -26,6 +20,7 @@ const ImportProtocol = () => {
   const miroInstance = getMiroInstance();
 
   const addWidgets = async () => {
+    setIsCreating(true);
     const viewport = await miroInstance.board.viewport.get();
 
     const startY = viewport.y + 110;
@@ -56,7 +51,8 @@ const ImportProtocol = () => {
       await miroInstance.showErrorNotification(
         "Could not create widgets. Error: " + JSON.stringify(e)
       );
-      await miroInstance.board.ui.closeLibrary();
+      setIsCreating(false);
+      await miroInstance.board.ui.closeModal();
     }
     if (metaData) {
       const existingTags = await miroInstance.board.tags.get({
@@ -88,24 +84,29 @@ const ImportProtocol = () => {
       height: columns * widgetSize,
     };
     await miroInstance.board.viewport.set(widgetsBounds);
-    await miroInstance.board.ui.closeLibrary();
+    await miroInstance.board.ui.closeModal();
+    setIsCreating(false);
     await miroInstance.showNotification(lines.length + " sticker created");
   };
 
   return (
     <Container>
-      <div>Create stickers from your recent protocol</div>
-      <div>
-        <label htmlFor="protocolPrefix">Protocol reference prefix</label>
-        <Input
+      <h1>Affinity Diagram Import</h1>
+      <h2>Create stickers for your recent user interview</h2>
+      <div className="form-group">
+        <label htmlFor="protocolPrefix">User Code (optional)</label>
+        <input
+          type="text"
+          className="input"
           id="protocolPrefix"
           value={metaData}
           onChange={(event) => setMetaData(event.target.value)}
         />
       </div>
-      <Protocol>
+      <Protocol className="form-group">
         <label htmlFor="protocolEntries">Paste the protocol below</label>
-        <Textarea
+        <textarea
+          className="textarea"
           id="protocolEntries"
           value={protocolText}
           onChange={(event) => {
@@ -113,7 +114,7 @@ const ImportProtocol = () => {
           }}
         />
       </Protocol>
-      <label>Preview</label>
+      <h2>Preview</h2>
       <Preview>
         {lines.length > 0 ? (
           lines.map((line, index) => (
@@ -127,9 +128,12 @@ const ImportProtocol = () => {
         )}
       </Preview>
       <button
-        className="button button-primary"
+        className={`button button-primary${
+          isCreating ? " button-loading" : ""
+        }`}
         onClick={addWidgets}
-        disabled={lines.length < 1}
+        disabled={isCreating || lines.length < 1}
+        type="button"
       >
         Create sticker
       </button>

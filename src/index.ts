@@ -1,5 +1,7 @@
-import toolbarIcon from "./assets/SourceInformation.svg?raw";
-import {getMiroInstance} from "./miroInstance";
+import sourceInformationIcon from "./assets/SourceInformation.svg?raw";
+import affinityDiagramIcon from "./assets/affinity-diagram.svg?raw";
+import { getMiroInstance } from "./miroInstance";
+import { IS_DEV_MODE } from "./sharedConsts";
 
 // https://developers.miro.com/docs/web-plugins-features
 
@@ -11,16 +13,16 @@ miroInstance.onReady(async () => {
   miroInstance.initialize({
     extensionPoints: {
       bottomBar: {
-        title: import.meta.env.DEV
-          ? "(DEV) "
-          : "" + "Affinity Diagram: show source information",
-        svgIcon: toolbarIcon,
+        title: `${
+          IS_DEV_MODE ? "(DEV) " : ""
+        }Affinity Diagram: show source information`,
+        svgIcon: sourceInformationIcon,
         onClick: async () => {
-          const isAuthorized = await miro.isAuthorized();
+          const isAuthorized = await miroInstance.isAuthorized();
 
           if (!isAuthorized) {
             // Ask the user to authorize the app.
-            await miro.requestAuthorization();
+            await miroInstance.requestAuthorization();
           }
 
           await miroInstance.board.ui.openLeftSidebar(
@@ -29,24 +31,24 @@ miroInstance.onReady(async () => {
         },
       },
       toolbar: {
-        title: import.meta.env.DEV
-          ? "(DEV) "
-          : "" + "Affinity Diagram: import protocol",
-        toolbarSvgIcon: toolbarIcon,
-        librarySvgIcon: toolbarIcon,
+        title: `${
+          IS_DEV_MODE ? "(DEV) " : ""
+        }Affinity Diagram: import protocol`,
+        toolbarSvgIcon: affinityDiagramIcon,
+        librarySvgIcon: affinityDiagramIcon,
         async onClick() {
-          const isAuthorized = await miro.isAuthorized();
+          const isAuthorized = await miroInstance.isAuthorized();
 
           if (!isAuthorized) {
             // Ask the user to authorize the app.
-            await miro.requestAuthorization();
+            await miroInstance.requestAuthorization();
           }
 
           // Remember that 'app.html' resolves relative to index.js file. So app.html have to be in the /dist/ folder.
-          await miroInstance.board.ui.openLibrary(
+          await miroInstance.board.ui.openModal(
             "src/ImportProtocol/ImportProtocol.html",
             {
-              title: "Import protocol",
+              fullscreen: true,
             }
           );
         },

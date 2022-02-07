@@ -1,9 +1,21 @@
-# Create Miro App
+# About this miro plugin
+This miro plugin helps you, to import user interview protocols, to be
+able to create an affinity diagram in a shared interpretation session.
+
+Optionally you can assign a user code to each protocol you are
+importing. This could be helpful to easily identify the original
+protocol in future discussions.
+
+Paste the raw text protocol in the importer and the plugin will create a sticker
+for each paragraph. You can later modify the sticker text (e.g. for
+brevity) while keeping the original text in the stickers meta data.
+
+# Developing the miro plugin
 
 ## How to start:
 
-- Run `yarn` or `npm install` to install dependencies
-- Run `yarn start` or `npm start` to start developing, you should have a URL
+- Run `yarn`
+- Run `yarn start` to start developing, you should have a URL
   that looks like this
 
 ```
@@ -16,7 +28,7 @@ http://localhost:3000
 
 ## How to build the app:
 
-Run `yarn run build` or `npm run build` and this will generate a static output
+Run `yarn run build` and this will generate a static output
 inside `dist/` which you can host on static hosting service.
 
 ### About the app

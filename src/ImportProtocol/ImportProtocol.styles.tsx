@@ -1,27 +1,26 @@
 import styled from "styled-components";
 
 export const Input = styled.input`
-  font-family: var(--body-font);
-  font-size: 1rem;
-  padding: 0.25rem;
-  border-radius: 0;
-  border: 1px solid lightgrey;
+  // font-family: var(--body-font);
+  // font-size: 1rem;
+  // padding: 0.25rem;
+  // border-radius: 0;
+  // border: 1px solid lightgrey;
   width: 100%;
 `;
 export const Textarea = styled.textarea`
   width: 100%;
   height: 2rem;
-  font-family: var(--body-font);
-  font-size: 1rem;
-  padding: 0.25rem;
-  border-radius: 0;
-  border: 1px solid lightgrey;
+  // font-family: var(--body-font);
+  // font-size: 1rem;
+  // padding: 0.25rem;
+  // border-radius: 0;
+  // border: 1px solid lightgrey;
 `;
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  gap: 2rem;
 `;
 export const Protocol = styled.div`
   display: flex;
