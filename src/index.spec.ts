@@ -52,11 +52,11 @@ describe("index file", () => {
       expect.objectContaining({
         extensionPoints: expect.objectContaining({
           bottomBar: expect.objectContaining({
-            title: "Affinity Diagram: show source information",
+            title: "View original minutes",
             onClick: expect.any(Function),
           }),
           toolbar: expect.objectContaining({
-            title: "Affinity Diagram: import protocol",
+            title: "Affinity Diagram Tools",
             onClick: expect.any(Function),
           }),
         }),
@@ -106,7 +106,7 @@ describe("index file", () => {
     expect(miroInstance.requestAuthorization).toHaveBeenCalled();
   });
 
-  it("should open the ImportProtocol view as library onClick of the toolbar Button", async () => {
+  it("should open the Overview view as library onClick of the toolbar Button", async () => {
     let initParams: Partial<SDK.IPluginConfig>;
     (miroInstance.initialize as jest.Mock).mockImplementation(
       (initParamsGiven) => {
@@ -122,11 +122,8 @@ describe("index file", () => {
     // @ts-ignore
     await initParams?.extensionPoints?.toolbar?.onClick();
 
-    expect(miroInstance.board.ui.openModal).toHaveBeenCalledWith(
-      "src/ImportProtocol/ImportProtocol.html",
-      {
-        fullscreen: true,
-      }
+    expect(miroInstance.board.ui.openLeftSidebar).toHaveBeenCalledWith(
+      "src/Overview/Overview.html"
     );
   });
 });

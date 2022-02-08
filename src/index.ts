@@ -10,12 +10,10 @@ import { IS_DEV_MODE } from "./sharedConsts";
 export const miroInstance = getMiroInstance();
 
 miroInstance.onReady(async () => {
-  miroInstance.initialize({
+  await miroInstance.initialize({
     extensionPoints: {
       bottomBar: {
-        title: `${
-          IS_DEV_MODE ? "(DEV) " : ""
-        }Affinity Diagram: show source information`,
+        title: `${IS_DEV_MODE ? "(DEV) " : ""}View original minutes`,
         svgIcon: sourceInformationIcon,
         onClick: async () => {
           const isAuthorized = await miroInstance.isAuthorized();
@@ -31,9 +29,7 @@ miroInstance.onReady(async () => {
         },
       },
       toolbar: {
-        title: `${
-          IS_DEV_MODE ? "(DEV) " : ""
-        }Affinity Diagram: import protocol`,
+        title: `${IS_DEV_MODE ? "(DEV) " : ""}Affinity Diagram Tools`,
         toolbarSvgIcon: affinityDiagramIcon,
         librarySvgIcon: affinityDiagramIcon,
         async onClick() {
@@ -43,13 +39,8 @@ miroInstance.onReady(async () => {
             // Ask the user to authorize the app.
             await miroInstance.requestAuthorization();
           }
-
-          // Remember that 'app.html' resolves relative to index.js file. So app.html have to be in the /dist/ folder.
-          await miroInstance.board.ui.openModal(
-            "src/ImportProtocol/ImportProtocol.html",
-            {
-              fullscreen: true,
-            }
+          await miroInstance.board.ui.openLeftSidebar(
+            "src/Overview/Overview.html"
           );
         },
       },

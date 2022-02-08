@@ -47,7 +47,7 @@ describe("ShowProtocolReference", () => {
   });
   it("should render the header", () => {
     setupUserEventAndRender(<ShowProtocolReference />);
-    expect(screen.getByText("Original protocol reference")).toBeVisible();
+    expect(screen.getByText("View original interview minutes")).toBeVisible();
   });
 
   it("should register an SELECTION_UPDATE event handler on load", () => {
