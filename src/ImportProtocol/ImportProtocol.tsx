@@ -5,6 +5,13 @@ import { Container, Preview, Protocol, Sticker } from "./ImportProtocol.styles";
 import { getEntryReferenceString } from "./ImportProtocol.helper";
 import { getMiroInstance } from "../miroInstance";
 
+const onKeyDown = (miroInstance: SDK.Root) => (evt: Event) => {
+  if (evt instanceof KeyboardEvent && evt.key.toLowerCase() == "escape") {
+    // Escape key pressed
+    miroInstance.board.ui.closeModal();
+  }
+};
+
 const ImportProtocol = () => {
   const [protocolText, setProtocolText] = useState("");
   const [metaData, setMetaData] = useState("");
@@ -18,6 +25,12 @@ const ImportProtocol = () => {
     }
   }, [protocolText, setLines]);
   const miroInstance = getMiroInstance();
+
+  useEffect(() => {
+    const eventHandler = onKeyDown(miroInstance);
+    document.addEventListener("keydown", eventHandler);
+    return () => document.removeEventListener("keydown", eventHandler);
+  }, [miroInstance]);
 
   const addWidgets = async () => {
     setIsCreating(true);
@@ -48,8 +61,10 @@ const ImportProtocol = () => {
     try {
       newWidgets = await miroInstance.board.widgets.create(widgetToBeCreated);
     } catch (e) {
+      const message =
+        e instanceof Error ? (e as Error).message : JSON.stringify(e);
       await miroInstance.showErrorNotification(
-        "Could not create widgets. Error: " + JSON.stringify(e)
+        `Could not create widgets. Error: ${message}`
       );
       setIsCreating(false);
       await miroInstance.board.ui.closeModal();

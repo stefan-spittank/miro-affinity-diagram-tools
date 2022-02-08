@@ -1,6 +1,6 @@
 import * as React from "react";
 import ImportProtocol from "./ImportProtocol";
-import { screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import { DeepPartial } from "../../testHelper/mockMiro";
 import { appId } from "../sharedConsts";
 import { setupUserEventAndRender } from "../../testHelper/setupUserEventAndRender";
@@ -27,6 +27,7 @@ const mockMiroInst = {
     },
   },
   showNotification: jest.fn(),
+  showErrorNotification: jest.fn(),
 };
 
 jest.mock("../miroInstance", () => ({
@@ -126,6 +127,23 @@ describe("ImportProtocol", () => {
           type: "sticker",
         })
       )
+    );
+  });
+
+  it("should show an error notification, if the widget creation fails", async () => {
+    const { user } = setupUserEventAndRender(<ImportProtocol />);
+
+    (mockMiroInst.board.widgets.create as jest.Mock).mockRejectedValue(
+      new Error("Forbidden")
+    );
+
+    const testProtocolLines = ["First line", "Second line", "Third line"];
+    screen.getByLabelText("Paste the protocol below").focus();
+    await user.paste(testProtocolLines.join("\n"));
+    await user.click(screen.getByRole("button", { name: "Create sticker" }));
+
+    expect(mockMiroInst.showErrorNotification).toHaveBeenCalledWith(
+      "Could not create widgets. Error: Forbidden"
     );
   });
 
@@ -240,5 +258,25 @@ describe("ImportProtocol", () => {
         expect.objectContaining({ id: index })
       )
     );
+  });
+
+  it("should close the modal if the user clicks on cancel", async () => {
+    const { user } = setupUserEventAndRender(<ImportProtocol />);
+
+    await user.click(screen.getByRole("button", { name: "Cancel" }));
+
+    expect(mockMiroInst.board.ui.closeModal).toHaveBeenCalled();
+  });
+
+  it("should close the modal if the presses escape", async () => {
+    setupUserEventAndRender(<ImportProtocol />);
+    fireEvent.keyDown(
+      screen.getByText("Create stickers for your recent user interview"),
+      {
+        key: "Escape",
+        code: "Escape",
+      }
+    );
+    expect(mockMiroInst.board.ui.closeModal).toHaveBeenCalled();
   });
 });
