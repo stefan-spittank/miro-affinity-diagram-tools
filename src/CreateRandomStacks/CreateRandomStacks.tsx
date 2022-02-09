@@ -10,7 +10,6 @@ import {
   divideArrayIntoRandomStacks,
   updateStickerPositionsForGivenStacks,
 } from "./CreateRandomStacks.tools";
-import IStickerWidget = SDK.IStickerWidget;
 
 const CreateRandomStacks = () => {
   const miroInstance = getMiroInstance();
@@ -40,11 +39,8 @@ const CreateRandomStacks = () => {
     useState(false);
 
   const createRandomStacks = async () => {
-    const widgets = await miroInstance.board.selection.get();
-    const stickersToDistribute = (widgets.filter(isProtocolEntrySticker) ||
-      []) as IStickerWidget[];
     const stacks = divideArrayIntoRandomStacks(
-      stickersToDistribute,
+      selectedSticker,
       numberOfParticipants,
       maxNumberOfStickers
     );
@@ -73,6 +69,9 @@ const CreateRandomStacks = () => {
   return (
     <>
       <h1>Create Random Stacks</h1>
+      <p className="p-small">
+        Selected number of stickers with notes: {selectedSticker.length}
+      </p>
       <p className="p-medium">
         In an interpretation session, each participant will be given a stack of
         random stickers, to help building the affinity map (see
@@ -116,6 +115,13 @@ const CreateRandomStacks = () => {
         <input
           className="input"
           id="maxNumberOfStickers"
+          placeholder={
+            !numberOfParticipantsInvalid && selectedSticker.length > 0
+              ? Math.ceil(
+                  selectedSticker.length / numberOfParticipants
+                ).toString()
+              : ""
+          }
           value={maxNumberOfStickersRaw}
           onChange={(event) => setMaxNumberOfStickersRaw(event.target.value)}
           onBlur={() => {
