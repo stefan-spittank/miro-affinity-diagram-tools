@@ -10,6 +10,16 @@ export const mockProtocolSticker = {
   },
 };
 
+export const mockProtocolSticker2 = {
+  type: "STICKER",
+  metadata: {
+    [appId]: {
+      protocolReference: "SSP-IVE-2",
+      originalText: "Another text from protocol",
+    },
+  },
+};
+
 export const mockNonProtocolSticker = {
   type: "STICKER",
   metadata: {

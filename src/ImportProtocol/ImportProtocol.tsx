@@ -4,6 +4,7 @@ import { appId } from "../sharedConsts";
 import { Container, Preview, Protocol, Sticker } from "./ImportProtocol.styles";
 import { getEntryReferenceString } from "./ImportProtocol.helper";
 import { getMiroInstance } from "../miroInstance";
+import { widgetSize } from "../Tools/interviewStickerTools";
 
 const onKeyDown = (miroInstance: SDK.Root) => (evt: Event) => {
   if (evt instanceof KeyboardEvent && evt.key.toLowerCase() == "escape") {
@@ -36,9 +37,8 @@ const ImportProtocol = () => {
     setIsCreating(true);
     const viewport = await miroInstance.board.viewport.get();
 
-    const startY = viewport.y + 110;
-    const startX = viewport.x + 110;
-    const widgetSize = 220;
+    const startY = viewport.y + widgetSize / 2;
+    const startX = viewport.x + widgetSize / 2;
     const columns = Math.ceil(Math.sqrt(lines.length));
 
     const widgetToBeCreated = lines.map((line, index) => {

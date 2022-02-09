@@ -11,6 +11,10 @@ module.exports = defineConfig({
       input: {
         index: path.resolve(__dirname, "index.html"),
         overview: path.resolve(__dirname, "src/Overview/Overview.html"),
+        createRandomStacks: path.resolve(
+          __dirname,
+          "src/CreateRandomStacks/CreateRandomStacks.html"
+        ),
         app: path.resolve(__dirname, "src/ImportProtocol/ImportProtocol.html"),
         sidebar: path.resolve(
           __dirname,

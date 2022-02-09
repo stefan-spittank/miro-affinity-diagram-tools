@@ -6,18 +6,9 @@ const Overview = () => {
   return (
     <>
       <h1>Affinity Diagram Tools</h1>
+      <h2>Import notes</h2>
       <p className="p-medium">
-        This miro plugin is intended for people doing user interviews (User
-        Experience Designers, Requirements Engineers,...). It helps importing
-        notes from your user interviews, to be able to create an affinity
-        diagram in a shared interpretation session. Optionally you can assign a
-        user code to each interview you are importing. This could be helpful to
-        easily identify the source interview in future discussions.
-      </p>
-
-      <h2>Import minutes</h2>
-      <p className="p-medium">
-        Paste the raw text minutes in the importer and the plugin will create a
+        Paste the raw text notes in the importer and the plugin will create a
         sticker for each paragraph.
       </p>
       <button
@@ -32,13 +23,13 @@ const Overview = () => {
           await miroInstance.board.ui.closeLeftSidebar();
         }}
       >
-        Import minutes
+        Import notes
       </button>
-      <h2>Review the orginal minutes</h2>
+      <h2>Review the orginal notes</h2>
       <p className="p-medium">
         You can safely modify the sticker text (e.g. for brevity) while the
         plugin makes sure, the original text is still available to you. You can
-        review the original minutes for the selected stickers any time.
+        review the original notes for the selected stickers any time.
       </p>
       <button
         className="button button-secondary"
@@ -48,7 +39,21 @@ const Overview = () => {
           );
         }}
       >
-        View original minutes
+        View original notes
+      </button>
+      <h2>Create random stacks</h2>
+      <p className="p-medium">
+        Split the stickers into random stacks for the interpretation session.
+      </p>
+      <button
+        className="button button-secondary"
+        onClick={async () => {
+          await miroInstance.board.ui.openLeftSidebar(
+            "src/CreateRandomStacks/CreateRandomStacks.html"
+          );
+        }}
+      >
+        Create random stacks
       </button>
     </>
   );

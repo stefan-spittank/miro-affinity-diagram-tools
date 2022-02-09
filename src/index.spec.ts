@@ -52,7 +52,7 @@ describe("index file", () => {
       expect.objectContaining({
         extensionPoints: expect.objectContaining({
           bottomBar: expect.objectContaining({
-            title: "View original minutes",
+            title: "View original notes",
             onClick: expect.any(Function),
           }),
           toolbar: expect.objectContaining({
@@ -96,9 +96,6 @@ describe("index file", () => {
 
     (miroInstance.isAuthorized as jest.Mock).mockReturnValue(false);
 
-    // 2 warnings:
-    // 1. initParams ist hier im Test sicher gesetzt
-    // 2. onClick ist in den Typen von miro falsch
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     await initParams?.extensionPoints?.bottomBar?.onClick();
@@ -115,9 +112,6 @@ describe("index file", () => {
     );
     await (miroInstance as unknown as MockMiro)._triggerOnReady();
 
-    // 2 warnings:
-    // 1. initParams ist hier im Test sicher gesetzt
-    // 2. onClick ist in den Typen von miro falsch
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     await initParams?.extensionPoints?.toolbar?.onClick();

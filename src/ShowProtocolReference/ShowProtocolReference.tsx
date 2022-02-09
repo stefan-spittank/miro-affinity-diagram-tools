@@ -7,7 +7,7 @@ import {
   StickerContainer,
   StickerData,
 } from "./ShowProtocolReference.styles";
-import { isProtocolEntryStickers } from "./ShowProtocolReference.helper";
+import { isProtocolEntrySticker } from "../Tools/interviewStickerTools";
 import { getMiroInstance } from "../miroInstance";
 
 const ShowProtocolReference = () => {
@@ -17,19 +17,19 @@ const ShowProtocolReference = () => {
 
   useEffect(() => {
     miroInstance.addListener("SELECTION_UPDATED", (event) => {
-      setSelectedSticker(event.data.filter(isProtocolEntryStickers));
+      setSelectedSticker(event.data.filter(isProtocolEntrySticker));
     });
     miroInstance.board.selection
       .get()
       .then((widgets) =>
-        setSelectedSticker(widgets.filter(isProtocolEntryStickers) || [])
+        setSelectedSticker(widgets.filter(isProtocolEntrySticker) || [])
       );
   }, []);
 
   return (
     <Container>
       <div className="cs1 ce12">
-        <h2>View original interview minutes</h2>
+        <h2>View original interview notes</h2>
       </div>
       <StickerContainer>
         {selectedSticker.length > 0 ? (
