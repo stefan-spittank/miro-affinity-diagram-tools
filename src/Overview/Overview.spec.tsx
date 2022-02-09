@@ -29,10 +29,10 @@ describe("Overview", () => {
     expect(screen.getByText("Affinity Diagram Tools")).toBeVisible();
   });
 
-  it("should open the import screen and close the left sidebar if the user clicks on 'Import minutes'", async () => {
+  it("should open the import screen and close the left sidebar if the user clicks on 'Import notes'", async () => {
     const { user } = setupUserEventAndRender(<Overview />);
 
-    const importButton = screen.getByRole("button", { name: "Import minutes" });
+    const importButton = screen.getByRole("button", { name: "Import notes" });
     await user.click(importButton);
 
     expect(mockMiroInst.board.ui.openModal).toHaveBeenCalledWith(
@@ -44,11 +44,11 @@ describe("Overview", () => {
     expect(mockMiroInst.board.ui.closeLeftSidebar).toHaveBeenCalled();
   });
 
-  it("should open the ShowProtocolReference screen if the user clicks on 'View original minutes'", async () => {
+  it("should open the ShowProtocolReference screen if the user clicks on 'View original notes'", async () => {
     const { user } = setupUserEventAndRender(<Overview />);
 
     const importButton = screen.getByRole("button", {
-      name: "View original minutes",
+      name: "View original notes",
     });
     await user.click(importButton);
 

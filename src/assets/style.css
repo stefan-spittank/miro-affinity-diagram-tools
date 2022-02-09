@@ -27,6 +27,10 @@ body {
   overflow-y: auto;
 }
 
+#root .button {
+  /* Leave space for vertical scrollbar */
+  width: calc(100% - 16px);
+}
 .container {
   max-width: 580px;
   margin: 0 auto;

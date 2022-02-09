@@ -13,7 +13,7 @@ miroInstance.onReady(async () => {
   await miroInstance.initialize({
     extensionPoints: {
       bottomBar: {
-        title: `${IS_DEV_MODE ? "(DEV) " : ""}View original minutes`,
+        title: `${IS_DEV_MODE ? "(DEV) " : ""}View original notes`,
         svgIcon: sourceInformationIcon,
         onClick: async () => {
           const isAuthorized = await miroInstance.isAuthorized();
