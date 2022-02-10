@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { appId } from "../sharedConsts";
+import { appId, ViewProps } from "../sharedConsts";
 import {
   Container,
   Sticker,
@@ -9,8 +9,9 @@ import {
 } from "./ShowProtocolReference.styles";
 import { isProtocolEntrySticker } from "../Tools/interviewStickerTools";
 import { getMiroInstance } from "../miroInstance";
+import { Breadcrumb } from "../SharedComponents/Breadcrumb";
 
-const ShowProtocolReference = () => {
+const ShowProtocolReference = ({ setView }: ViewProps) => {
   const miroInstance = getMiroInstance();
 
   const [selectedSticker, setSelectedSticker] = useState<SDK.IWidget[]>([]);
@@ -29,7 +30,12 @@ const ShowProtocolReference = () => {
   return (
     <Container>
       <div className="cs1 ce12">
-        <h2>View original interview notes</h2>
+        <h2>
+          <Breadcrumb href="" onClick={() => setView("Overview")}>
+            Affinity Diagram Tools /
+          </Breadcrumb>
+          View original interview notes
+        </h2>
       </div>
       <StickerContainer>
         {selectedSticker.length > 0 ? (

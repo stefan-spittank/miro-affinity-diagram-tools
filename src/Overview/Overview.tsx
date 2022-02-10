@@ -1,7 +1,8 @@
 import * as React from "react";
 import { getMiroInstance } from "../miroInstance";
+import { ViewProps } from "../sharedConsts";
 
-const Overview = () => {
+const Overview = ({ setView }: ViewProps) => {
   const miroInstance = getMiroInstance();
   return (
     <>
@@ -20,7 +21,6 @@ const Overview = () => {
               fullscreen: true,
             }
           );
-          await miroInstance.board.ui.closeLeftSidebar();
         }}
       >
         Import notes
@@ -33,10 +33,8 @@ const Overview = () => {
       </p>
       <button
         className="button button-secondary"
-        onClick={async () => {
-          await miroInstance.board.ui.openLeftSidebar(
-            "src/ShowProtocolReference/ShowProtocolReference.html"
-          );
+        onClick={() => {
+          setView("ShowProtocolReference");
         }}
       >
         View original notes
@@ -47,10 +45,8 @@ const Overview = () => {
       </p>
       <button
         className="button button-secondary"
-        onClick={async () => {
-          await miroInstance.board.ui.openLeftSidebar(
-            "src/CreateRandomStacks/CreateRandomStacks.html"
-          );
+        onClick={() => {
+          setView("CreateRandomStacks");
         }}
       >
         Create random stacks

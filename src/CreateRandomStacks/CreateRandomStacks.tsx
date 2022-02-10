@@ -10,13 +10,17 @@ import {
   divideArrayIntoRandomStacks,
   updateStickerPositionsForGivenStacks,
 } from "./CreateRandomStacks.tools";
+import { Breadcrumb } from "../SharedComponents/Breadcrumb";
+import { ViewProps } from "../sharedConsts";
 
-const CreateRandomStacks = () => {
+const CreateRandomStacks = ({ setView }: ViewProps) => {
   const miroInstance = getMiroInstance();
   const [selectedSticker, setSelectedSticker] = useState<SDK.IWidget[]>([]);
 
   useEffect(() => {
+    console.log("CRS add listener", event);
     miroInstance.addListener("SELECTION_UPDATED", (event) => {
+      console.log("CRS selection updated", event);
       setSelectedSticker(event.data.filter(isProtocolEntrySticker));
     });
     miroInstance.board.selection
@@ -71,7 +75,12 @@ const CreateRandomStacks = () => {
 
   return (
     <>
-      <h1>Create Random Stacks</h1>
+      <h2>
+        <Breadcrumb href="" onClick={() => setView("Overview")}>
+          Affinity Diagram Tools /
+        </Breadcrumb>
+        Create Random Stacks
+      </h2>
       <p className="p-small">
         Selected number of stickers with notes: {selectedSticker.length}
       </p>

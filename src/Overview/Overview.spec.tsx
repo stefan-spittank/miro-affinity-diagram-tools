@@ -24,13 +24,13 @@ describe("Overview", () => {
   });
 
   it("should render the header", () => {
-    setupUserEventAndRender(<Overview />);
+    setupUserEventAndRender(<Overview setView={() => {}} />);
 
     expect(screen.getByText("Affinity Diagram Tools")).toBeVisible();
   });
 
-  it("should open the import screen and close the left sidebar if the user clicks on 'Import notes'", async () => {
-    const { user } = setupUserEventAndRender(<Overview />);
+  it("should open the import screen if the user clicks on 'Import notes'", async () => {
+    const { user } = setupUserEventAndRender(<Overview setView={() => {}} />);
 
     const importButton = screen.getByRole("button", { name: "Import notes" });
     await user.click(importButton);
@@ -41,19 +41,19 @@ describe("Overview", () => {
         fullscreen: true,
       }
     );
-    expect(mockMiroInst.board.ui.closeLeftSidebar).toHaveBeenCalled();
   });
 
   it("should open the ShowProtocolReference screen if the user clicks on 'View original notes'", async () => {
-    const { user } = setupUserEventAndRender(<Overview />);
+    const mockSetView = jest.fn();
+    const { user } = setupUserEventAndRender(
+      <Overview setView={mockSetView} />
+    );
 
     const importButton = screen.getByRole("button", {
       name: "View original notes",
     });
     await user.click(importButton);
 
-    expect(mockMiroInst.board.ui.openLeftSidebar).toHaveBeenCalledWith(
-      "src/ShowProtocolReference/ShowProtocolReference.html"
-    );
+    expect(mockSetView).toHaveBeenCalledWith("ShowProtocolReference");
   });
 });

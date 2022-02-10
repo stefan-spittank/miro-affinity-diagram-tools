@@ -10,16 +10,8 @@ module.exports = defineConfig({
     rollupOptions: {
       input: {
         index: path.resolve(__dirname, "index.html"),
-        overview: path.resolve(__dirname, "src/Overview/Overview.html"),
-        createRandomStacks: path.resolve(
-          __dirname,
-          "src/CreateRandomStacks/CreateRandomStacks.html"
-        ),
+        sidebarApp: path.resolve(__dirname, "src/SidebarApp/SidebarApp.html"),
         app: path.resolve(__dirname, "src/ImportProtocol/ImportProtocol.html"),
-        sidebar: path.resolve(
-          __dirname,
-          "src/ShowProtocolReference/ShowProtocolReference.html"
-        ),
       },
     },
   },
