@@ -106,7 +106,6 @@ describe("CreateRandomStacks", () => {
     await act(async () => {
       await resolveBoardGetSelection([mockProtocolSticker2]);
     });
-
     const button = screen.getByRole("button", { name: "Create random stacks" });
     expect(button).toBeVisible();
     expect(button).toBeEnabled();

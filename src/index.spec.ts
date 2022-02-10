@@ -51,37 +51,12 @@ describe("index file", () => {
     expect(miroInstance.initialize).toHaveBeenCalledWith(
       expect.objectContaining({
         extensionPoints: expect.objectContaining({
-          bottomBar: expect.objectContaining({
-            title: "View original notes",
-            onClick: expect.any(Function),
-          }),
           toolbar: expect.objectContaining({
             title: "Affinity Diagram Tools",
             onClick: expect.any(Function),
           }),
         }),
       })
-    );
-  });
-
-  it("should open the ShowProtocolReference view in the leftSidebar onClick of the bottomBar Button", async () => {
-    let initParams: Partial<SDK.IPluginConfig>;
-    (miroInstance.initialize as jest.Mock).mockImplementation(
-      (initParamsGiven) => {
-        initParams = initParamsGiven;
-      }
-    );
-    await (miroInstance as unknown as MockMiro)._triggerOnReady();
-
-    // 2 warnings:
-    // 1. initParams ist hier im Test sicher gesetzt
-    // 2. onClick ist in den Typen von miro falsch
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    await initParams?.extensionPoints?.bottomBar?.onClick();
-
-    expect(miroInstance.board.ui.openLeftSidebar).toHaveBeenCalledWith(
-      "src/ShowProtocolReference/ShowProtocolReference.html"
     );
   });
 
@@ -98,12 +73,12 @@ describe("index file", () => {
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    await initParams?.extensionPoints?.bottomBar?.onClick();
+    await initParams?.extensionPoints?.toolbar?.onClick();
 
     expect(miroInstance.requestAuthorization).toHaveBeenCalled();
   });
 
-  it("should open the Overview view as library onClick of the toolbar Button", async () => {
+  it("should open the App view as library onClick of the toolbar Button", async () => {
     let initParams: Partial<SDK.IPluginConfig>;
     (miroInstance.initialize as jest.Mock).mockImplementation(
       (initParamsGiven) => {
@@ -117,7 +92,7 @@ describe("index file", () => {
     await initParams?.extensionPoints?.toolbar?.onClick();
 
     expect(miroInstance.board.ui.openLeftSidebar).toHaveBeenCalledWith(
-      "src/Overview/Overview.html"
+      "src/SidebarApp/SidebarApp.html"
     );
   });
 });
