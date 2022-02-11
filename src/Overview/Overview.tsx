@@ -25,11 +25,11 @@ const Overview = ({ setView }: ViewProps) => {
       >
         Import notes
       </button>
-      <h2>Review the orginal notes</h2>
+      <h2>View orginal notes</h2>
       <p className="p-medium">
         You can safely modify the sticker text (e.g. for brevity) while the
         plugin makes sure, the original text is still available to you. You can
-        review the original notes for the selected stickers any time.
+        view the original notes for the selected stickers any time.
       </p>
       <button
         className="button button-secondary"

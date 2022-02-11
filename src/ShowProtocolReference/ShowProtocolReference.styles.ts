@@ -20,3 +20,9 @@ export const Sticker = styled.div`
   margin-bottom: 1.5rem;
   margin-right: 0.5rem;
 `;
+
+export const OriginalWord = styled.span`
+  background-color: lightblue;
+`;
+
+export const ChangedWord = styled.span``;
