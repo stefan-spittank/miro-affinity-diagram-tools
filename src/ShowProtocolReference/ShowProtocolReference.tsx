@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
 import { appId, ViewProps } from "../sharedConsts";
 import {
   Container,
@@ -7,31 +6,20 @@ import {
   StickerContainer,
   StickerData,
 } from "./ShowProtocolReference.styles";
-import { isProtocolEntrySticker } from "../Tools/interviewStickerTools";
-import { getMiroInstance } from "../miroInstance";
 import { Breadcrumb } from "../SharedComponents/Breadcrumb";
 
-const ShowProtocolReference = ({ setView }: ViewProps) => {
-  const miroInstance = getMiroInstance();
-
-  const [selectedSticker, setSelectedSticker] = useState<SDK.IWidget[]>([]);
-
-  useEffect(() => {
-    miroInstance.addListener("SELECTION_UPDATED", (event) => {
-      setSelectedSticker(event.data.filter(isProtocolEntrySticker));
-    });
-    miroInstance.board.selection
-      .get()
-      .then((widgets) =>
-        setSelectedSticker(widgets.filter(isProtocolEntrySticker) || [])
-      );
-  }, []);
-
+const ShowProtocolReference = ({ setView, selectedSticker }: ViewProps) => {
   return (
     <Container>
       <div className="cs1 ce12">
         <h2>
-          <Breadcrumb href="" onClick={() => setView("Overview")}>
+          <Breadcrumb
+            href=""
+            onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+              e.preventDefault();
+              setView("Overview");
+            }}
+          >
             Affinity Diagram Tools /
           </Breadcrumb>
           View original interview notes

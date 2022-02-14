@@ -4,4 +4,5 @@ export type Views = "Overview" | "CreateRandomStacks" | "ShowProtocolReference";
 
 export type ViewProps = {
   setView: (view: Views) => void;
+  selectedSticker: SDK.IStickerWidget[];
 };

@@ -1,11 +1,7 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { getMiroInstance } from "../miroInstance";
-import {
-  getWidgetBounds,
-  isProtocolEntrySticker,
-  widgetSize,
-} from "../Tools/interviewStickerTools";
+import { getWidgetBounds, widgetSize } from "../Tools/interviewStickerTools";
 import {
   divideArrayIntoRandomStacks,
   updateStickerPositionsForGivenStacks,
@@ -13,22 +9,8 @@ import {
 import { Breadcrumb } from "../SharedComponents/Breadcrumb";
 import { ViewProps } from "../sharedConsts";
 
-const CreateRandomStacks = ({ setView }: ViewProps) => {
+const CreateRandomStacks = ({ setView, selectedSticker }: ViewProps) => {
   const miroInstance = getMiroInstance();
-  const [selectedSticker, setSelectedSticker] = useState<SDK.IWidget[]>([]);
-
-  useEffect(() => {
-    console.log("CRS add listener", event);
-    miroInstance.addListener("SELECTION_UPDATED", (event) => {
-      console.log("CRS selection updated", event);
-      setSelectedSticker(event.data.filter(isProtocolEntrySticker));
-    });
-    miroInstance.board.selection
-      .get()
-      .then((widgets) =>
-        setSelectedSticker(widgets.filter(isProtocolEntrySticker) || [])
-      );
-  }, []);
 
   const [numberOfParticipantsRaw, setNumberOfParticipantsRaw] = useState("2");
   const [numberOfParticipants, setNumberOfParticipants] = useState(2);
@@ -43,11 +25,11 @@ const CreateRandomStacks = ({ setView }: ViewProps) => {
     useState(false);
 
   const createRandomStacks = async () => {
-    const widgets = await miroInstance.board.selection.get();
-    const stickersToDistribute = (widgets.filter(isProtocolEntrySticker) ||
-      []) as SDK.IStickerWidget[];
+    //const widgets = await miroInstance.board.selection.get();
+    // const stickersToDistribute = (widgets.filter(isProtocolEntrySticker) ||
+    //   []) as SDK.IStickerWidget[];
     const stacks = divideArrayIntoRandomStacks(
-      stickersToDistribute,
+      selectedSticker,
       numberOfParticipants,
       maxNumberOfStickers
     );
@@ -76,7 +58,13 @@ const CreateRandomStacks = ({ setView }: ViewProps) => {
   return (
     <>
       <h2>
-        <Breadcrumb href="" onClick={() => setView("Overview")}>
+        <Breadcrumb
+          href=""
+          onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+            e.preventDefault();
+            setView("Overview");
+          }}
+        >
           Affinity Diagram Tools /
         </Breadcrumb>
         Create Random Stacks
