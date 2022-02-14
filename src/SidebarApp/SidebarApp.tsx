@@ -12,9 +12,9 @@ const getOnSelectionUpdatedHandler =
     miroInstance: SDK.Root,
     setSelectedSticker: (sticker: SDK.IWidget[]) => void
   ) =>
-  async (event: SDK.Event) => {
-    console.log("selection updated", event);
+  async () => {
     // event.data doesn't give the complete widget, only parts of it.
+    // so read the real widgets from the miro instance
     const selection = await miroInstance.board.selection.get();
     setSelectedSticker(selection.filter(isProtocolEntrySticker));
   };

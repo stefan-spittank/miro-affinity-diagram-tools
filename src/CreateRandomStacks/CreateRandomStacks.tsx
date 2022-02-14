@@ -25,9 +25,6 @@ const CreateRandomStacks = ({ setView, selectedSticker }: ViewProps) => {
     useState(false);
 
   const createRandomStacks = async () => {
-    //const widgets = await miroInstance.board.selection.get();
-    // const stickersToDistribute = (widgets.filter(isProtocolEntrySticker) ||
-    //   []) as SDK.IStickerWidget[];
     const stacks = divideArrayIntoRandomStacks(
       selectedSticker,
       numberOfParticipants,
