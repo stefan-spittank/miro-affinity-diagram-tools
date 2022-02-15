@@ -1,6 +1,6 @@
 import { DeepPartial } from "../../testHelper/mockMiro";
 import { setupUserEventAndRender } from "../../testHelper/setupUserEventAndRender";
-import { act, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import * as React from "react";
 import CreateRandomStacks from "./CreateRandomStacks";
 import {

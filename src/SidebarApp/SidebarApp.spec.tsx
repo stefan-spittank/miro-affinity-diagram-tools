@@ -6,6 +6,7 @@ import { act } from "@testing-library/react";
 import * as OverviewModule from "../Overview/Overview";
 import { ViewProps } from "../sharedConsts";
 import * as ShowProtocolReferenceModule from "../ShowMinutesMetadata/ShowMinutesMetadata";
+import * as CreateRandomStacksModule from "../CreateRandomStacks/CreateRandomStacks";
 
 const mockMiroInst = {
   addListener: jest.fn(),
@@ -62,5 +63,26 @@ describe("SidebarApp", () => {
     });
 
     expect(spyShowProtocolReference).toHaveBeenCalled();
+  });
+
+  it("should render CreateRandomStacks if setView is called with 'CreateRandomStacks'", () => {
+    let setView: ViewProps["setView"] = () => {};
+    jest
+      .spyOn(OverviewModule, "default")
+      .mockImplementation(({ setView: setViewFromProps }: ViewProps) => {
+        setView = setViewFromProps;
+        return <></>;
+      });
+    const spyCreateRandomStacks = jest.spyOn(
+      CreateRandomStacksModule,
+      "default"
+    );
+
+    setupUserEventAndRender(<SidebarApp />);
+    act(() => {
+      setView("CreateRandomStacks");
+    });
+
+    expect(spyCreateRandomStacks).toHaveBeenCalled();
   });
 });

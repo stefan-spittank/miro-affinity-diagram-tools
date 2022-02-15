@@ -21,6 +21,20 @@ describe("ShowMinutesMetadata", () => {
     expect(screen.getByText("View original interview notes")).toBeVisible();
   });
 
+  it("should open the Overview screen if the user clicks the 'Affinity Diagram Tools /' breadcrumb", async () => {
+    const mockSetView = jest.fn();
+    const { user } = setupUserEventAndRender(
+      <ShowMinutesMetadata setView={mockSetView} />
+    );
+
+    const breadcrumb = screen.getByRole("link", {
+      name: "Affinity Diagram Tools /",
+    });
+    await user.click(breadcrumb);
+
+    expect(mockSetView).toHaveBeenCalledWith("Overview");
+  });
+
   it("shoud render the selected protocol stickers", async () => {
     const stickers = [
       mockMinutesSticker,
