@@ -94,13 +94,19 @@ const CreateRandomStacks = ({ setView }: ViewProps) => {
           }}
           onBlur={() => {
             const newValue = parseInt(numberOfParticipantsRaw);
-            if (isNaN(newValue)) {
+            if (isNaN(newValue) || newValue <= 0) {
               setNumberOfParticipantsInvalid(true);
             } else {
+              setNumberOfParticipantsInvalid(false);
               setNumberOfParticipants(newValue);
             }
           }}
         />
+        {numberOfParticipantsInvalid && (
+          <div className="status-text">
+            Number of participants must be a number greater 0
+          </div>
+        )}
       </div>
       <div
         className={"form-group" + (maxNumberOfStickersInvalid ? " error" : "")}
@@ -129,13 +135,19 @@ const CreateRandomStacks = ({ setView }: ViewProps) => {
               maxNumberOfStickersRaw !== ""
                 ? parseInt(maxNumberOfStickersRaw)
                 : undefined;
-            if (newValue && isNaN(newValue)) {
+            if (newValue !== undefined && (isNaN(newValue) || newValue <= 0)) {
               setMaxNumberOfStickersInvalid(true);
             } else {
+              setMaxNumberOfStickersInvalid(false);
               setMaxNumberOfStickers(newValue);
             }
           }}
         />
+        {maxNumberOfStickersInvalid && (
+          <div className="status-text">
+            Number of stickers must be a number greater 0
+          </div>
+        )}
       </div>
       <button
         className="button button-primary"

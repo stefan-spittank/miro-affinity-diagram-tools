@@ -56,4 +56,18 @@ describe("Overview", () => {
 
     expect(mockSetView).toHaveBeenCalledWith("ShowMinutesMetadata");
   });
+
+  it("should open the CreateRandomStacks screen if the user clicks on 'Create random stacks'", async () => {
+    const mockSetView = jest.fn();
+    const { user } = setupUserEventAndRender(
+      <Overview setView={mockSetView} />
+    );
+
+    const importButton = screen.getByRole("button", {
+      name: "Create random stacks",
+    });
+    await user.click(importButton);
+
+    expect(mockSetView).toHaveBeenCalledWith("CreateRandomStacks");
+  });
 });

@@ -1,6 +1,6 @@
 import { DeepPartial } from "../../testHelper/mockMiro";
 import { setupUserEventAndRender } from "../../testHelper/setupUserEventAndRender";
-import { screen } from "@testing-library/react";
+import { act, screen } from "@testing-library/react";
 import * as React from "react";
 import CreateRandomStacks from "./CreateRandomStacks";
 import {
@@ -56,6 +56,21 @@ describe("CreateRandomStacks", () => {
     setupUserEventAndRender(<CreateRandomStacks setView={() => {}} />);
     expect(screen.getByText("Create Random Stacks")).toBeVisible();
   });
+
+  it("should open the Overview screen if the user clicks the 'Affinity Diagram Tools /' breadcrumb", async () => {
+    const mockSetView = jest.fn();
+    const { user } = setupUserEventAndRender(
+      <CreateRandomStacks setView={mockSetView} />
+    );
+
+    const breadcrumb = screen.getByRole("link", {
+      name: "Affinity Diagram Tools /",
+    });
+    await user.click(breadcrumb);
+
+    expect(mockSetView).toHaveBeenCalledWith("Overview");
+  });
+
   it("should display the number of selected stickers with notes", async () => {
     jest.spyOn(MiroProviderModule, "useMiro").mockReturnValue({
       selectedSticker: [
@@ -101,6 +116,51 @@ describe("CreateRandomStacks", () => {
       getMockMinutesSticker("PROT1", "Entry " + index)
     );
   };
+
+  it("should mark non numeric text as invalid for the number of participants", async () => {
+    const { user } = setupUserEventAndRender(
+      <CreateRandomStacks setView={() => {}} />
+    );
+    await user.type(screen.getByLabelText("Number of participants"), "e");
+    screen.getByLabelText("Number of participants").blur();
+    expect(
+      screen.getByText("Number of participants must be a number greater 0")
+    ).toBeVisible();
+  });
+
+  it("should mark 0 as invalid for the number of participants", async () => {
+    const { user } = setupUserEventAndRender(
+      <CreateRandomStacks setView={() => {}} />
+    );
+    const numberOfParticipantsInput = screen.getByLabelText(
+      "Number of participants"
+    ) as HTMLInputElement;
+
+    await user.clear(numberOfParticipantsInput);
+    await user.type(numberOfParticipantsInput, "0");
+
+    screen.getByLabelText("Number of participants").blur();
+    expect(
+      screen.getByText("Number of participants must be a number greater 0")
+    ).toBeVisible();
+  });
+
+  it("should mark 0 as invalid for the number of stickers per participant", async () => {
+    const { user } = setupUserEventAndRender(
+      <CreateRandomStacks setView={() => {}} />
+    );
+    const numberOfStickersInput = screen.getByLabelText(
+      "Max. number of stickers per participant"
+    ) as HTMLInputElement;
+
+    await user.clear(numberOfStickersInput);
+    await user.type(numberOfStickersInput, "0");
+
+    numberOfStickersInput.blur();
+    expect(
+      screen.getByText("Number of stickers must be a number greater 0")
+    ).toBeVisible();
+  });
 
   it("should call calculate stacks and pass them to updateStickerPositionsForGivenStacks", async () => {
     const stickers = getMockProtocolStickers(6) as SDK.IStickerWidget[];
