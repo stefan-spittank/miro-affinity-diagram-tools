@@ -4,12 +4,13 @@ import { screen } from "@testing-library/react";
 import * as React from "react";
 import CreateRandomStacks from "./CreateRandomStacks";
 import {
-  getMockProtocolSticker,
-  mockProtocolSticker,
-  mockProtocolSticker2,
+  getMockMinutesSticker,
+  mockMinutesSticker,
+  mockMinutesSticker2,
 } from "../../testHelper/mockData";
 import * as CreateRandomStackTools from "./CreateRandomStacks.tools";
 import { ArrayStack } from "./CreateRandomStacks.tools";
+import * as MiroProviderModule from "../MiroProvider/MiroProvider";
 
 const mockMiroInst = {
   addListener: jest.fn(),
@@ -52,29 +53,42 @@ describe("CreateRandomStacks", () => {
   });
 
   it("should render the header", () => {
-    setupUserEventAndRender(
-      <CreateRandomStacks setView={() => {}} selectedSticker={[]} />
-    );
+    setupUserEventAndRender(<CreateRandomStacks setView={() => {}} />);
     expect(screen.getByText("Create Random Stacks")).toBeVisible();
   });
-  it("should display the number of selected stickers with notes", async () => {
-    setupUserEventAndRender(
-      <CreateRandomStacks
-        setView={() => {}}
-        selectedSticker={
-          [mockProtocolSticker, mockProtocolSticker2] as SDK.IStickerWidget[]
-        }
-      />
+
+  it("should open the Overview screen if the user clicks the 'Affinity Diagram Tools /' breadcrumb", async () => {
+    const mockSetView = jest.fn();
+    const { user } = setupUserEventAndRender(
+      <CreateRandomStacks setView={mockSetView} />
     );
+
+    const breadcrumb = screen.getByRole("link", {
+      name: "Affinity Diagram Tools /",
+    });
+    await user.click(breadcrumb);
+
+    expect(mockSetView).toHaveBeenCalledWith("Overview");
+  });
+
+  it("should display the number of selected stickers with notes", async () => {
+    jest.spyOn(MiroProviderModule, "useMiro").mockReturnValue({
+      selectedSticker: [
+        mockMinutesSticker,
+        mockMinutesSticker2,
+      ] as SDK.IStickerWidget[],
+    });
+    setupUserEventAndRender(<CreateRandomStacks setView={() => {}} />);
     expect(
       screen.getByText("Selected number of stickers with notes: 2")
     ).toBeVisible();
   });
 
   it("should disable the 'Create random stacks' button with an explaining label if there are no note stickers selected", async () => {
-    setupUserEventAndRender(
-      <CreateRandomStacks setView={() => {}} selectedSticker={[]} />
-    );
+    jest.spyOn(MiroProviderModule, "useMiro").mockReturnValue({
+      selectedSticker: [],
+    });
+    setupUserEventAndRender(<CreateRandomStacks setView={() => {}} />);
 
     const button = screen.getByRole("button", {
       name: "No interview stickers selected",
@@ -85,12 +99,10 @@ describe("CreateRandomStacks", () => {
   });
 
   it("should enable the 'Create random stacks' button if there are note stickers selected", async () => {
-    setupUserEventAndRender(
-      <CreateRandomStacks
-        setView={() => {}}
-        selectedSticker={[mockProtocolSticker2] as SDK.IStickerWidget[]}
-      />
-    );
+    jest.spyOn(MiroProviderModule, "useMiro").mockReturnValue({
+      selectedSticker: [mockMinutesSticker2] as SDK.IStickerWidget[],
+    });
+    setupUserEventAndRender(<CreateRandomStacks setView={() => {}} />);
 
     const button = screen.getByRole("button", { name: "Create random stacks" });
     expect(button).toBeVisible();
@@ -101,14 +113,62 @@ describe("CreateRandomStacks", () => {
     stickerCount: number
   ): Partial<SDK.IStickerWidget>[] => {
     return Array.from({ length: stickerCount }, (_, index) =>
-      getMockProtocolSticker("PROT1", "Entry " + index)
+      getMockMinutesSticker("PROT1", "Entry " + index)
     );
   };
 
+  it("should mark non numeric text as invalid for the number of participants", async () => {
+    const { user } = setupUserEventAndRender(
+      <CreateRandomStacks setView={() => {}} />
+    );
+    await user.type(screen.getByLabelText("Number of participants"), "e");
+    screen.getByLabelText("Number of participants").blur();
+    expect(
+      screen.getByText("Number of participants must be a number greater 0")
+    ).toBeVisible();
+  });
+
+  it("should mark 0 as invalid for the number of participants", async () => {
+    const { user } = setupUserEventAndRender(
+      <CreateRandomStacks setView={() => {}} />
+    );
+    const numberOfParticipantsInput = screen.getByLabelText(
+      "Number of participants"
+    ) as HTMLInputElement;
+
+    await user.clear(numberOfParticipantsInput);
+    await user.type(numberOfParticipantsInput, "0");
+
+    screen.getByLabelText("Number of participants").blur();
+    expect(
+      screen.getByText("Number of participants must be a number greater 0")
+    ).toBeVisible();
+  });
+
+  it("should mark 0 as invalid for the number of stickers per participant", async () => {
+    const { user } = setupUserEventAndRender(
+      <CreateRandomStacks setView={() => {}} />
+    );
+    const numberOfStickersInput = screen.getByLabelText(
+      "Max. number of stickers per participant"
+    ) as HTMLInputElement;
+
+    await user.clear(numberOfStickersInput);
+    await user.type(numberOfStickersInput, "0");
+
+    numberOfStickersInput.blur();
+    expect(
+      screen.getByText("Number of stickers must be a number greater 0")
+    ).toBeVisible();
+  });
+
   it("should call calculate stacks and pass them to updateStickerPositionsForGivenStacks", async () => {
     const stickers = getMockProtocolStickers(6) as SDK.IStickerWidget[];
+    jest.spyOn(MiroProviderModule, "useMiro").mockReturnValue({
+      selectedSticker: stickers,
+    });
     const { user } = setupUserEventAndRender(
-      <CreateRandomStacks setView={() => {}} selectedSticker={stickers} />
+      <CreateRandomStacks setView={() => {}} />
     );
 
     const mockStacks: ArrayStack<Partial<SDK.IWidget>>[] = [

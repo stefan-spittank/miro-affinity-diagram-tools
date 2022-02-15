@@ -8,9 +8,11 @@ import {
 } from "./CreateRandomStacks.tools";
 import { Breadcrumb } from "../SharedComponents/Breadcrumb";
 import { ViewProps } from "../sharedConsts";
+import { useMiro } from "../MiroProvider/MiroProvider";
 
-const CreateRandomStacks = ({ setView, selectedSticker }: ViewProps) => {
+const CreateRandomStacks = ({ setView }: ViewProps) => {
   const miroInstance = getMiroInstance();
+  const { selectedSticker } = useMiro();
 
   const [numberOfParticipantsRaw, setNumberOfParticipantsRaw] = useState("2");
   const [numberOfParticipants, setNumberOfParticipants] = useState(2);
@@ -92,13 +94,19 @@ const CreateRandomStacks = ({ setView, selectedSticker }: ViewProps) => {
           }}
           onBlur={() => {
             const newValue = parseInt(numberOfParticipantsRaw);
-            if (isNaN(newValue)) {
+            if (isNaN(newValue) || newValue <= 0) {
               setNumberOfParticipantsInvalid(true);
             } else {
+              setNumberOfParticipantsInvalid(false);
               setNumberOfParticipants(newValue);
             }
           }}
         />
+        {numberOfParticipantsInvalid && (
+          <div className="status-text">
+            Number of participants must be a number greater 0
+          </div>
+        )}
       </div>
       <div
         className={"form-group" + (maxNumberOfStickersInvalid ? " error" : "")}
@@ -127,13 +135,19 @@ const CreateRandomStacks = ({ setView, selectedSticker }: ViewProps) => {
               maxNumberOfStickersRaw !== ""
                 ? parseInt(maxNumberOfStickersRaw)
                 : undefined;
-            if (newValue && isNaN(newValue)) {
+            if (newValue !== undefined && (isNaN(newValue) || newValue <= 0)) {
               setMaxNumberOfStickersInvalid(true);
             } else {
+              setMaxNumberOfStickersInvalid(false);
               setMaxNumberOfStickers(newValue);
             }
           }}
         />
+        {maxNumberOfStickersInvalid && (
+          <div className="status-text">
+            Number of stickers must be a number greater 0
+          </div>
+        )}
       </div>
       <button
         className="button button-primary"

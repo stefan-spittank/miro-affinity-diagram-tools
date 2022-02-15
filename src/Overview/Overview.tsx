@@ -16,7 +16,7 @@ const Overview = ({ setView }: ViewProps) => {
         className="button button-primary"
         onClick={async () => {
           await miroInstance.board.ui.openModal(
-            "src/ImportProtocol/ImportProtocol.html",
+            "src/ImportMinutes/ImportMinutes.html",
             {
               fullscreen: true,
             }
@@ -34,7 +34,7 @@ const Overview = ({ setView }: ViewProps) => {
       <button
         className="button button-secondary"
         onClick={() => {
-          setView("ShowProtocolReference");
+          setView("ShowMinutesMetadata");
         }}
       >
         View original notes

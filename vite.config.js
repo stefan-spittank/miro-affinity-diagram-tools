@@ -11,7 +11,7 @@ module.exports = defineConfig({
       input: {
         index: path.resolve(__dirname, "index.html"),
         sidebarApp: path.resolve(__dirname, "src/SidebarApp/SidebarApp.html"),
-        app: path.resolve(__dirname, "src/ImportProtocol/ImportProtocol.html"),
+        app: path.resolve(__dirname, "src/ImportMinutes/ImportMinutes.html"),
       },
     },
   },

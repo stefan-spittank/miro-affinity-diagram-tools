@@ -1,6 +1,6 @@
 import { appId } from "../src/sharedConsts";
 
-export const mockProtocolSticker = {
+export const mockMinutesSticker = {
   type: "STICKER",
   bounds: {
     top: 10,
@@ -14,40 +14,40 @@ export const mockProtocolSticker = {
   },
   metadata: {
     [appId]: {
-      protocolReference: "SSP-IVE-1",
-      originalText: "Original text from protocol",
+      minutesReference: "SSP-IVE-1",
+      originalText: "Original text from minutes",
     },
   },
 };
 
-export const mockProtocolSticker2 = {
-  ...mockProtocolSticker,
+export const mockMinutesSticker2 = {
+  ...mockMinutesSticker,
   type: "STICKER",
   metadata: {
     [appId]: {
-      protocolReference: "SSP-IVE-2",
-      originalText: "Another text from protocol",
+      minutesReference: "SSP-IVE-2",
+      originalText: "Another text from minutes",
     },
   },
 };
 
-export const mockNonProtocolSticker = {
-  ...mockProtocolSticker,
+export const mockNonMinutesSticker = {
+  ...mockMinutesSticker,
   type: "STICKER",
   metadata: {
     ["anotherAppId"]: {},
   },
 };
 
-export const getMockProtocolSticker = (
-  protocolReference: string,
+export const getMockMinutesSticker = (
+  minutesReference: string,
   originalText: string
 ): Partial<SDK.IStickerWidget> => ({
-  ...mockProtocolSticker,
+  ...mockMinutesSticker,
   type: "STICKER",
   metadata: {
     [appId]: {
-      protocolReference,
+      minutesReference,
       originalText,
     },
   },

@@ -22,7 +22,7 @@ export const Container = styled.div`
   flex-direction: column;
   height: 100%;
 `;
-export const Protocol = styled.div`
+export const Minutes = styled.div`
   display: flex;
   flex-direction: column;
 `;

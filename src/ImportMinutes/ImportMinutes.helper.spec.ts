@@ -1,4 +1,4 @@
-import { getEntryReferenceString } from "./ImportProtocol.helper";
+import { getEntryReferenceString } from "./ImportMinutes.helper";
 
 describe("getEntryReferenceString", () => {
   it("should return the metaData follow by a dash and the index plus 1 if metadata is given", () => {
