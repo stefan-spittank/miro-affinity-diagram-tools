@@ -1,8 +1,8 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { appId } from "../sharedConsts";
-import { Container, Preview, Protocol, Sticker } from "./ImportProtocol.styles";
-import { getEntryReferenceString } from "./ImportProtocol.helper";
+import { Container, Preview, Minutes, Sticker } from "./ImportMinutes.styles";
+import { getEntryReferenceString } from "./ImportMinutes.helper";
 import { getMiroInstance } from "../miroInstance";
 import { widgetSize } from "../Tools/interviewStickerTools";
 
@@ -13,7 +13,7 @@ const onKeyDown = (miroInstance: SDK.Root) => (evt: Event) => {
   }
 };
 
-const ImportProtocol = () => {
+const ImportMinutes = () => {
   const [protocolText, setProtocolText] = useState("");
   const [metaData, setMetaData] = useState("");
   const [isCreating, setIsCreating] = useState(false);
@@ -51,7 +51,7 @@ const ImportProtocol = () => {
         y: startY + column * widgetSize,
         metadata: {
           [appId]: {
-            protocolReference: getEntryReferenceString(index, metaData),
+            minutesReference: getEntryReferenceString(index, metaData),
             originalText: line,
           },
         },
@@ -118,8 +118,8 @@ const ImportProtocol = () => {
           onChange={(event) => setMetaData(event.target.value)}
         />
       </div>
-      <Protocol className="form-group">
-        <label htmlFor="protocolEntries">Paste the protocol below</label>
+      <Minutes className="form-group">
+        <label htmlFor="protocolEntries">Paste the minutes below</label>
         <textarea
           className="textarea"
           id="protocolEntries"
@@ -128,7 +128,7 @@ const ImportProtocol = () => {
             setProtocolText(event.target.value);
           }}
         />
-      </Protocol>
+      </Minutes>
       <h2>Preview</h2>
       <Preview>
         {lines.length > 0 ? (
@@ -164,4 +164,4 @@ const ImportProtocol = () => {
   );
 };
 
-export default ImportProtocol;
+export default ImportMinutes;

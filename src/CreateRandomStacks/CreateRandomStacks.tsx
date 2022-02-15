@@ -8,9 +8,11 @@ import {
 } from "./CreateRandomStacks.tools";
 import { Breadcrumb } from "../SharedComponents/Breadcrumb";
 import { ViewProps } from "../sharedConsts";
+import { useMiro } from "../MiroProvider/MiroProvider";
 
-const CreateRandomStacks = ({ setView, selectedSticker }: ViewProps) => {
+const CreateRandomStacks = ({ setView }: ViewProps) => {
   const miroInstance = getMiroInstance();
+  const { selectedSticker } = useMiro();
 
   const [numberOfParticipantsRaw, setNumberOfParticipantsRaw] = useState("2");
   const [numberOfParticipants, setNumberOfParticipants] = useState(2);

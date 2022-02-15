@@ -1,18 +1,15 @@
+import { getWidgetBounds, isMinutesSticker } from "./interviewStickerTools";
 import {
-  getWidgetBounds,
-  isProtocolEntrySticker,
-} from "./interviewStickerTools";
-import {
-  mockNonProtocolSticker,
-  mockProtocolSticker,
+  mockNonMinutesSticker,
+  mockMinutesSticker,
 } from "../../testHelper/mockData";
 
-describe("isProtocolEntrySticker", () => {
-  it("should return true if a protocolReference is found", () => {
-    expect(isProtocolEntrySticker(mockProtocolSticker)).toEqual(true);
+describe("isMinutesSticker", () => {
+  it("should return true if a minutesReference is found", () => {
+    expect(isMinutesSticker(mockMinutesSticker)).toEqual(true);
   });
-  it("should return false if no protocolReference is found", () => {
-    expect(isProtocolEntrySticker(mockNonProtocolSticker)).toEqual(false);
+  it("should return false if no minutesReference is found", () => {
+    expect(isMinutesSticker(mockNonMinutesSticker)).toEqual(false);
   });
 });
 
@@ -23,7 +20,7 @@ describe("getWidgetBounds", () => {
 
   it("should return the bounds of one widget", () => {
     const widget: Pick<SDK.IWidget, "bounds"> = {
-      ...mockProtocolSticker,
+      ...mockMinutesSticker,
       bounds: {
         x: 10,
         y: 10,
@@ -40,7 +37,7 @@ describe("getWidgetBounds", () => {
 
   it("should return the bounds of two overlapping widgets widget", () => {
     const widget1: Pick<SDK.IWidget, "bounds"> = {
-      ...mockProtocolSticker,
+      ...mockMinutesSticker,
       bounds: {
         x: 10,
         y: 10,
@@ -53,7 +50,7 @@ describe("getWidgetBounds", () => {
       },
     };
     const widget2: Pick<SDK.IWidget, "bounds"> = {
-      ...mockProtocolSticker,
+      ...mockMinutesSticker,
       bounds: {
         x: 50,
         y: 50,
@@ -79,7 +76,7 @@ describe("getWidgetBounds", () => {
 
   it("should return the bounds of two non overlapping widgets widget", () => {
     const widget1: Pick<SDK.IWidget, "bounds"> = {
-      ...mockProtocolSticker,
+      ...mockMinutesSticker,
       bounds: {
         x: 10,
         y: 10,
@@ -92,7 +89,7 @@ describe("getWidgetBounds", () => {
       },
     };
     const widget2: Pick<SDK.IWidget, "bounds"> = {
-      ...mockProtocolSticker,
+      ...mockMinutesSticker,
       bounds: {
         x: 50,
         y: 50,

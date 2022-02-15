@@ -1,5 +1,5 @@
 import * as React from "react";
-import ImportProtocol from "./ImportProtocol";
+import ImportMinutes from "./ImportMinutes";
 import { fireEvent, screen } from "@testing-library/react";
 import { DeepPartial } from "../../testHelper/mockMiro";
 import { appId } from "../sharedConsts";
@@ -34,7 +34,7 @@ jest.mock("../miroInstance", () => ({
   getMiroInstance: jest.fn((): DeepPartial<SDK.Root> => mockMiroInst),
 }));
 
-describe("ImportProtocol", () => {
+describe("ImportMinutes", () => {
   beforeEach(() => {
     (mockMiroInst.board.viewport.get as jest.Mock).mockReturnValue({
       x: 0,
@@ -50,17 +50,17 @@ describe("ImportProtocol", () => {
   });
 
   it("should render the header", () => {
-    setupUserEventAndRender(<ImportProtocol />);
+    setupUserEventAndRender(<ImportMinutes />);
     expect(
       screen.getByText("Create stickers for your recent user interview")
     ).toBeVisible();
   });
 
   it("should render a preview sticker for each line of text pasted into the protocolEntries", async () => {
-    const { user } = setupUserEventAndRender(<ImportProtocol />);
+    const { user } = setupUserEventAndRender(<ImportMinutes />);
 
     const testProtocolLines = ["First line", "Second line", "Third line"];
-    screen.getByLabelText("Paste the protocol below").focus();
+    screen.getByLabelText("Paste the minutes below").focus();
     await user.paste(testProtocolLines.join("\n"));
 
     testProtocolLines.forEach((line) =>
@@ -72,10 +72,10 @@ describe("ImportProtocol", () => {
     "should render a prefix containing the given metaData and an index starting with 1 for each line of text" +
       " pasted into the protocolEntries",
     async () => {
-      const { user } = setupUserEventAndRender(<ImportProtocol />);
+      const { user } = setupUserEventAndRender(<ImportMinutes />);
 
       const testProtocolLines = ["First line", "Second line", "Third line"];
-      screen.getByLabelText("Paste the protocol below").focus();
+      screen.getByLabelText("Paste the minutes below").focus();
       await user.paste(testProtocolLines.join("\n"));
       const metaData = "SSP-IVE";
       await user.type(screen.getByLabelText("User Code (optional)"), metaData);
@@ -90,10 +90,10 @@ describe("ImportProtocol", () => {
     "should render a prefix containing a hash and an index starting with 1 for each line of text pasted into the" +
       " protocolEntries if no meta data were given",
     async () => {
-      const { user } = setupUserEventAndRender(<ImportProtocol />);
+      const { user } = setupUserEventAndRender(<ImportMinutes />);
 
       const testProtocolLines = ["First line", "Second line", "Third line"];
-      screen.getByLabelText("Paste the protocol below").focus();
+      screen.getByLabelText("Paste the minutes below").focus();
       await user.paste(testProtocolLines.join("\n"));
 
       testProtocolLines.forEach((_, index) =>
@@ -102,8 +102,8 @@ describe("ImportProtocol", () => {
     }
   );
 
-  it("should not create any widgets without a protocol", async () => {
-    const { user } = setupUserEventAndRender(<ImportProtocol />);
+  it("should not create any widgets without minutes", async () => {
+    const { user } = setupUserEventAndRender(<ImportMinutes />);
 
     const createButton = screen.getByRole("button", { name: "Create sticker" });
     await user.click(createButton);
@@ -112,11 +112,11 @@ describe("ImportProtocol", () => {
     expect(mockMiroInst.board.widgets.create).not.toHaveBeenCalled();
   });
 
-  it("should create a widget for each line of the protocol", async () => {
-    const { user } = setupUserEventAndRender(<ImportProtocol />);
+  it("should create a widget for each line of the minutes", async () => {
+    const { user } = setupUserEventAndRender(<ImportMinutes />);
 
     const testProtocolLines = ["First line", "Second line", "Third line"];
-    screen.getByLabelText("Paste the protocol below").focus();
+    screen.getByLabelText("Paste the minutes below").focus();
     await user.paste(testProtocolLines.join("\n"));
     await user.click(screen.getByRole("button", { name: "Create sticker" }));
 
@@ -131,14 +131,14 @@ describe("ImportProtocol", () => {
   });
 
   it("should show an error notification, if the widget creation fails", async () => {
-    const { user } = setupUserEventAndRender(<ImportProtocol />);
+    const { user } = setupUserEventAndRender(<ImportMinutes />);
 
     (mockMiroInst.board.widgets.create as jest.Mock).mockRejectedValue(
       new Error("Forbidden")
     );
 
     const testProtocolLines = ["First line", "Second line", "Third line"];
-    screen.getByLabelText("Paste the protocol below").focus();
+    screen.getByLabelText("Paste the minutes below").focus();
     await user.paste(testProtocolLines.join("\n"));
     await user.click(screen.getByRole("button", { name: "Create sticker" }));
 
@@ -147,11 +147,11 @@ describe("ImportProtocol", () => {
     );
   });
 
-  it("should not create a widget for an empty line of the protocol", async () => {
-    const { user } = setupUserEventAndRender(<ImportProtocol />);
+  it("should not create a widget for an empty line of the minutes", async () => {
+    const { user } = setupUserEventAndRender(<ImportMinutes />);
 
     const testProtocolLines = ["First line", "", "Third line"];
-    screen.getByLabelText("Paste the protocol below").focus();
+    screen.getByLabelText("Paste the minutes below").focus();
     await user.paste(testProtocolLines.join("\n"));
     await user.click(screen.getByRole("button", { name: "Create sticker" }));
 
@@ -166,10 +166,10 @@ describe("ImportProtocol", () => {
   });
 
   it("should add the original text to the widgets metadata", async () => {
-    const { user } = setupUserEventAndRender(<ImportProtocol />);
+    const { user } = setupUserEventAndRender(<ImportMinutes />);
 
     const testProtocolLines = ["First line", "Second line", "Third line"];
-    screen.getByLabelText("Paste the protocol below").focus();
+    screen.getByLabelText("Paste the minutes below").focus();
     await user.paste(testProtocolLines.join("\n"));
     const metaData = "SSP-IVE";
     await user.type(screen.getByLabelText("User Code (optional)"), metaData);
@@ -180,7 +180,7 @@ describe("ImportProtocol", () => {
         expect.objectContaining({
           metadata: {
             [appId]: {
-              protocolReference: `${metaData}-${index + 1}`,
+              minutesReference: `${metaData}-${index + 1}`,
               originalText: line,
             },
           },
@@ -189,12 +189,12 @@ describe("ImportProtocol", () => {
     );
   });
 
-  it("should create a tag for the protocol and add it to all created widgets", async () => {
-    const { user } = setupUserEventAndRender(<ImportProtocol />);
+  it("should create a tag for the minutes and add it to all created widgets", async () => {
+    const { user } = setupUserEventAndRender(<ImportMinutes />);
 
     const testProtocolLines = ["First line", "Second line", "Third line"];
 
-    screen.getByLabelText("Paste the protocol below").focus();
+    screen.getByLabelText("Paste the minutes below").focus();
     await user.paste(testProtocolLines.join("\n"));
 
     const metaData = "SSP-IVE";
@@ -212,8 +212,8 @@ describe("ImportProtocol", () => {
     });
   });
 
-  it("should add it all created widgets to an existing tag (if the protocol tag exists)", async () => {
-    const { user } = setupUserEventAndRender(<ImportProtocol />);
+  it("should add it all created widgets to an existing tag (if the minutes tag exists)", async () => {
+    const { user } = setupUserEventAndRender(<ImportMinutes />);
     const metaData = "SSP-IVE";
 
     const existingTag = {
@@ -225,7 +225,7 @@ describe("ImportProtocol", () => {
 
     const testProtocolLines = ["First line", "Second line", "Third line"];
 
-    screen.getByLabelText("Paste the protocol below").focus();
+    screen.getByLabelText("Paste the minutes below").focus();
     await user.paste(testProtocolLines.join("\n"));
 
     await user.type(screen.getByLabelText("User Code (optional)"), metaData);
@@ -244,11 +244,11 @@ describe("ImportProtocol", () => {
   });
 
   it("should select the created widgets", async () => {
-    const { user } = setupUserEventAndRender(<ImportProtocol />);
+    const { user } = setupUserEventAndRender(<ImportMinutes />);
 
     const testProtocolLines = ["First line", "Second line", "Third line"];
 
-    screen.getByLabelText("Paste the protocol below").focus();
+    screen.getByLabelText("Paste the minutes below").focus();
     await user.paste(testProtocolLines.join("\n"));
 
     await user.click(screen.getByRole("button", { name: "Create sticker" }));
@@ -261,7 +261,7 @@ describe("ImportProtocol", () => {
   });
 
   it("should close the modal if the user clicks on cancel", async () => {
-    const { user } = setupUserEventAndRender(<ImportProtocol />);
+    const { user } = setupUserEventAndRender(<ImportMinutes />);
 
     await user.click(screen.getByRole("button", { name: "Cancel" }));
 
@@ -269,7 +269,7 @@ describe("ImportProtocol", () => {
   });
 
   it("should close the modal if the presses escape", async () => {
-    setupUserEventAndRender(<ImportProtocol />);
+    setupUserEventAndRender(<ImportMinutes />);
     fireEvent.keyDown(
       screen.getByText("Create stickers for your recent user interview"),
       {

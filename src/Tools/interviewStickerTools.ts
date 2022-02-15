@@ -2,11 +2,11 @@ import { appId } from "../sharedConsts";
 
 export const widgetSize = 220;
 
-export const isProtocolEntrySticker = (
+export const isMinutesSticker = (
   widget: Pick<SDK.IWidget, "type" | "metadata">
 ): boolean =>
   widget.type === "STICKER" &&
-  Boolean(widget.metadata[appId]?.protocolReference);
+  Boolean(widget.metadata[appId]?.minutesReference);
 
 export const getWidgetBounds = (
   widgets: Pick<SDK.IWidget, "bounds">[]

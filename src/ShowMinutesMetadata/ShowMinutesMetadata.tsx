@@ -5,10 +5,13 @@ import {
   Sticker,
   StickerContainer,
   StickerData,
-} from "./ShowProtocolReference.styles";
+} from "./ShowMinutesMetadata.styles";
 import { Breadcrumb } from "../SharedComponents/Breadcrumb";
+import { useMiro } from "../MiroProvider/MiroProvider";
 
-const ShowProtocolReference = ({ setView, selectedSticker }: ViewProps) => {
+const ShowMinutesMetadata = ({ setView }: ViewProps) => {
+  const { selectedSticker } = useMiro();
+
   return (
     <Container>
       <div className="cs1 ce12">
@@ -27,10 +30,10 @@ const ShowProtocolReference = ({ setView, selectedSticker }: ViewProps) => {
       </div>
       <StickerContainer>
         {selectedSticker.length > 0 ? (
-          selectedSticker.map((sticker: SDK.IWidget, index) => {
+          selectedSticker.map((sticker: SDK.IWidget, index: number) => {
             return (
               <StickerData key={index}>
-                <strong>{sticker.metadata[appId]?.protocolReference}</strong>
+                <strong>{sticker.metadata[appId]?.minutesReference}</strong>
                 <Sticker>{sticker.metadata[appId]?.originalText}</Sticker>
               </StickerData>
             );
@@ -43,4 +46,4 @@ const ShowProtocolReference = ({ setView, selectedSticker }: ViewProps) => {
   );
 };
 
-export default ShowProtocolReference;
+export default ShowMinutesMetadata;

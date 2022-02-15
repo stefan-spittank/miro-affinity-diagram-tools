@@ -36,14 +36,14 @@ describe("Overview", () => {
     await user.click(importButton);
 
     expect(mockMiroInst.board.ui.openModal).toHaveBeenCalledWith(
-      "src/ImportProtocol/ImportProtocol.html",
+      "src/ImportMinutes/ImportMinutes.html",
       {
         fullscreen: true,
       }
     );
   });
 
-  it("should open the ShowProtocolReference screen if the user clicks on 'View original notes'", async () => {
+  it("should open the ShowMinutesMetadata screen if the user clicks on 'View original notes'", async () => {
     const mockSetView = jest.fn();
     const { user } = setupUserEventAndRender(
       <Overview setView={mockSetView} />
@@ -54,6 +54,6 @@ describe("Overview", () => {
     });
     await user.click(importButton);
 
-    expect(mockSetView).toHaveBeenCalledWith("ShowProtocolReference");
+    expect(mockSetView).toHaveBeenCalledWith("ShowMinutesMetadata");
   });
 });

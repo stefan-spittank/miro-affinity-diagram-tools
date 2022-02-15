@@ -1,64 +1,27 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Overview from "../Overview/Overview";
 import CreateRandomStacks from "../CreateRandomStacks/CreateRandomStacks";
-import { Views } from "../sharedConsts";
-import ShowProtocolReference from "../ShowProtocolReference/ShowProtocolReference";
-import { getMiroInstance } from "../miroInstance";
-import { isProtocolEntrySticker } from "../Tools/interviewStickerTools";
+import { ViewProps, Views } from "../sharedConsts";
+import ShowMinutesMetadata from "../ShowMinutesMetadata/ShowMinutesMetadata";
+import MiroProvider from "../MiroProvider/MiroProvider";
 
-const getOnSelectionUpdatedHandler =
-  (
-    miroInstance: SDK.Root,
-    setSelectedSticker: (sticker: SDK.IWidget[]) => void
-  ) =>
-  async () => {
-    // event.data doesn't give the complete widget, only parts of it.
-    // so read the real widgets from the miro instance
-    const selection = await miroInstance.board.selection.get();
-    setSelectedSticker(selection.filter(isProtocolEntrySticker));
-  };
-
-const SidebarApp = () => {
-  const miroInstance = getMiroInstance();
-
-  const [view, setView] = useState<Views>("Overview");
-  const [selectedSticker, setSelectedSticker] = useState<SDK.IWidget[]>([]);
-
-  useEffect(() => {
-    const selectionHandler = getOnSelectionUpdatedHandler(
-      miroInstance,
-      setSelectedSticker
-    );
-    miroInstance.addListener("SELECTION_UPDATED", selectionHandler);
-    miroInstance.board.selection
-      .get()
-      .then((widgets) =>
-        setSelectedSticker(widgets.filter(isProtocolEntrySticker) || [])
-      );
-    return () => {
-      miroInstance.removeListener("SELECTION_UPDATED", selectionHandler);
-    };
-  }, [miroInstance, setSelectedSticker]);
-
+const getContent = (view: Views, setView: ViewProps["setView"]) => {
   switch (view) {
     case "CreateRandomStacks":
-      return (
-        <CreateRandomStacks
-          setView={setView}
-          selectedSticker={selectedSticker}
-        />
-      );
-    case "ShowProtocolReference":
-      return (
-        <ShowProtocolReference
-          setView={setView}
-          selectedSticker={selectedSticker}
-        />
-      );
+      return <CreateRandomStacks setView={setView} />;
+    case "ShowMinutesMetadata":
+      return <ShowMinutesMetadata setView={setView} />;
     default:
-      return <Overview setView={setView} selectedSticker={selectedSticker} />;
+      return <Overview setView={setView} />;
   }
+};
+
+const SidebarApp = () => {
+  const [view, setView] = useState<Views>("Overview");
+
+  const content = getContent(view, setView);
+  return <MiroProvider>{content}</MiroProvider>;
 };
 
 export default SidebarApp;
