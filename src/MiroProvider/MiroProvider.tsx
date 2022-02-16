@@ -4,6 +4,7 @@ import {
   ReactNode,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import { getMiroInstance } from "../miroInstance";
@@ -11,9 +12,11 @@ import { isMinutesSticker } from "../Tools/interviewStickerTools";
 
 export type MiroContextHook = {
   selectedSticker: SDK.IStickerWidget[];
+  refreshSticker: () => Promise<void>;
 };
 export const MiroContext = createContext<MiroContextHook>({
   selectedSticker: [],
+  refreshSticker: () => Promise.resolve(),
 });
 
 export type MiroProviderProps = {
@@ -58,8 +61,18 @@ const MiroProvider = ({ children }: MiroProviderProps) => {
     };
   }, [miroInstance, setSelectedSticker]);
 
+  const refreshSticker = useMemo(
+    () => async () => {
+      const selection = await miroInstance.board.selection.get();
+      setSelectedSticker(
+        selection.filter(isMinutesSticker) as SDK.IStickerWidget[]
+      );
+    },
+    [miroInstance, setSelectedSticker]
+  );
+
   return (
-    <MiroContext.Provider value={{ selectedSticker }}>
+    <MiroContext.Provider value={{ selectedSticker, refreshSticker }}>
       {children}
     </MiroContext.Provider>
   );

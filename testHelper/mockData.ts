@@ -1,7 +1,9 @@
 import { appId } from "../src/sharedConsts";
 
 export const mockMinutesSticker = {
+  id: "mockMinutesStickerId",
   type: "STICKER",
+  text: "Original text from minutes",
   bounds: {
     top: 10,
     left: 10,
@@ -22,6 +24,7 @@ export const mockMinutesSticker = {
 
 export const mockMinutesSticker2 = {
   ...mockMinutesSticker,
+  id: "mockMinutesSticker2Id",
   type: "STICKER",
   metadata: {
     [appId]: {
@@ -33,6 +36,7 @@ export const mockMinutesSticker2 = {
 
 export const mockNonMinutesSticker = {
   ...mockMinutesSticker,
+  id: "mockNonMinutesStickerId",
   type: "STICKER",
   metadata: {
     ["anotherAppId"]: {},
@@ -44,6 +48,7 @@ export const getMockMinutesSticker = (
   originalText: string
 ): Partial<SDK.IStickerWidget> => ({
   ...mockMinutesSticker,
+  id: "mockStickerIdForRef-" + minutesReference,
   type: "STICKER",
   metadata: {
     [appId]: {

@@ -16,6 +16,7 @@ describe("ShowMinutesMetadata", () => {
   it("should render the header", () => {
     jest.spyOn(MiroProviderModule, "useMiro").mockReturnValue({
       selectedSticker: [],
+      refreshSticker: () => Promise.resolve(),
     });
     setupUserEventAndRender(<ShowMinutesMetadata setView={() => {}} />);
     expect(screen.getByText("View original interview notes")).toBeVisible();
@@ -42,21 +43,22 @@ describe("ShowMinutesMetadata", () => {
     ] as SDK.IStickerWidget[];
     jest.spyOn(MiroProviderModule, "useMiro").mockReturnValue({
       selectedSticker: stickers,
+      refreshSticker: () => Promise.resolve(),
     });
     setupUserEventAndRender(<ShowMinutesMetadata setView={() => {}} />);
 
     expect(
       screen.getByText(stickers[0].metadata[appId].minutesReference)
     ).toBeVisible();
-    expect(
-      screen.getByText(stickers[0].metadata[appId].originalText)
-    ).toBeVisible();
+    expect(screen.getByTestId("sticker-" + stickers[0].id)).toHaveTextContent(
+      stickers[0].metadata[appId].originalText
+    );
     expect(
       screen.getByText(stickers[1].metadata[appId].minutesReference)
     ).toBeVisible();
-    expect(
-      screen.getByText(stickers[1].metadata[appId].originalText)
-    ).toBeVisible();
+    expect(screen.getByTestId("sticker-" + stickers[1].id)).toHaveTextContent(
+      stickers[1].metadata[appId].originalText
+    );
   });
 
   it("shoud not render the stickers without metaData for this app", async () => {
@@ -64,6 +66,7 @@ describe("ShowMinutesMetadata", () => {
       mockMinutesSticker,
       {
         ...mockMinutesSticker,
+        id: "stickerForAnotherAppId",
         metadata: {
           ["anotherAppId"]: {
             minutesReference: "Random stuff from another app",
@@ -73,15 +76,16 @@ describe("ShowMinutesMetadata", () => {
     ] as SDK.IStickerWidget[];
     jest.spyOn(MiroProviderModule, "useMiro").mockReturnValue({
       selectedSticker: stickers,
+      refreshSticker: () => Promise.resolve(),
     });
     setupUserEventAndRender(<ShowMinutesMetadata setView={() => {}} />);
 
     expect(
       screen.getByText(stickers[0].metadata?.[appId].minutesReference)
     ).toBeVisible();
-    expect(
-      screen.getByText(stickers[0].metadata?.[appId].originalText)
-    ).toBeVisible();
+    expect(screen.getByTestId("sticker-" + stickers[0].id)).toHaveTextContent(
+      stickers[0].metadata[appId].originalText
+    );
     expect(
       screen.queryByText(
         stickers[1].metadata?.["anotherAppId"]?.minutesReference

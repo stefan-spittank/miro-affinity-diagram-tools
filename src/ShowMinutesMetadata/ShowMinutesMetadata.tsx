@@ -1,17 +1,23 @@
 import * as React from "react";
+import { useState } from "react";
 import { appId, ViewProps } from "../sharedConsts";
 import {
+  ChangedWord,
   Container,
+  OriginalWord,
   Sticker,
   StickerContainer,
   StickerData,
+  Wrap,
 } from "./ShowMinutesMetadata.styles";
 import { Breadcrumb } from "../SharedComponents/Breadcrumb";
 import { useMiro } from "../MiroProvider/MiroProvider";
+import MinuteStickerActions from "./MinuteStickerActions";
+import OriginalMinuteEditor from "./OriginalMinuteEditor";
 
 const ShowMinutesMetadata = ({ setView }: ViewProps) => {
   const { selectedSticker } = useMiro();
-
+  const [editMode, setEditMode] = useState(false);
   return (
     <Container>
       <div className="cs1 ce12">
@@ -30,12 +36,47 @@ const ShowMinutesMetadata = ({ setView }: ViewProps) => {
       </div>
       <StickerContainer>
         {selectedSticker.length > 0 ? (
-          selectedSticker.map((sticker: SDK.IWidget, index: number) => {
+          selectedSticker.map((sticker: SDK.IWidget) => {
+            const originalText = sticker.metadata[appId]?.originalText || "";
+            const wordsInOriginal = originalText.split(/\b/);
+            const stickerText = (sticker as SDK.IStickerWidget).plainText || "";
+            const wordsInSticker = stickerText.split(/\s*\b\s*/);
+            const textHasChanged = stickerText !== originalText;
             return (
-              <StickerData key={index}>
-                <strong>{sticker.metadata[appId]?.minutesReference}</strong>
-                <Sticker>{sticker.metadata[appId]?.originalText}</Sticker>
-              </StickerData>
+              <div key={sticker.id}>
+                <StickerData>
+                  <Wrap>
+                    <strong>{sticker.metadata[appId]?.minutesReference}</strong>
+
+                    <MinuteStickerActions
+                      stickerText={stickerText}
+                      sticker={sticker}
+                      setEditMode={setEditMode}
+                      showSetAndRestoreActions={textHasChanged}
+                    />
+                  </Wrap>
+                  <Sticker data-testid={"sticker-" + sticker.id}>
+                    {editMode ? (
+                      <OriginalMinuteEditor
+                        sticker={sticker as SDK.IStickerWidget}
+                        originalText={originalText}
+                        setEditMode={setEditMode}
+                      />
+                    ) : (
+                      wordsInOriginal.map((word: string, i: number) => {
+                        if (!textHasChanged) {
+                          return <span key={i}>{word}</span>;
+                        }
+                        return wordsInSticker.includes(word) ? (
+                          <OriginalWord key={i}>{word}</OriginalWord>
+                        ) : (
+                          <ChangedWord key={i}>{word}</ChangedWord>
+                        );
+                      })
+                    )}
+                  </Sticker>
+                </StickerData>
+              </div>
             );
           })
         ) : (

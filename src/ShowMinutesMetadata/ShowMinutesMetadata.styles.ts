@@ -4,8 +4,20 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  gap: 2rem;
 `;
+
+export const Actions = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+export const Wrap = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+`;
+
 export const StickerData = styled.div`
   margin-top: 1rem;
 `;
@@ -20,3 +32,26 @@ export const Sticker = styled.div`
   margin-bottom: 1.5rem;
   margin-right: 0.5rem;
 `;
+
+export const Grid = styled.div`
+  display: grid;
+  position: relative;
+`;
+
+export const StickerEditor = styled.textarea`
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border: none;
+  line-height: 1.5;
+`;
+
+export const OriginalWord = styled.span`
+  background-color: lightblue;
+`;
+
+export const ChangedWord = styled.span``;
