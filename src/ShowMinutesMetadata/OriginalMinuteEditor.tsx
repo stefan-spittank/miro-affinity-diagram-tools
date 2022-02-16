@@ -7,13 +7,13 @@ import { useMiro } from "../MiroProvider/MiroProvider";
 
 type OriginalMinuteEditorProps = {
   originalText: string;
-  setEditMode: (mode: boolean) => void;
+  setEditStickerId: (id?: string) => void;
   sticker: SDK.IStickerWidget;
 };
 
 const OriginalMinuteEditor = ({
   originalText,
-  setEditMode,
+  setEditStickerId,
   sticker,
 }: OriginalMinuteEditorProps) => {
   const [text, setText] = useState("");
@@ -28,7 +28,7 @@ const OriginalMinuteEditor = ({
       if (evt instanceof KeyboardEvent && evt.key.toLowerCase() == "escape") {
         // Escape key pressed
         setText(originalText);
-        setEditMode(false);
+        setEditStickerId(undefined);
       }
     };
     document.addEventListener("keydown", eventHandler);
@@ -51,7 +51,7 @@ const OriginalMinuteEditor = ({
           }
         }}
         onBlur={async () => {
-          setEditMode(false);
+          setEditStickerId(undefined);
           if (text !== originalText) {
             const updatedSticker = {
               ...sticker,
