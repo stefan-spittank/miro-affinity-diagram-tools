@@ -1,4 +1,5 @@
 ![build](https://github.com/stefan-spittank/miro-affinity-diagram-tools/actions/workflows/nodejs.yml/badge.svg)
+![continous-deployment](https://github.com/stefan-spittank/miro-affinity-diagram-tools/actions/workflows/deploy.yml/badge.svg)
 [![codecov](https://codecov.io/gh/stefan-spittank/miro-affinity-diagram-tools/branch/master/graph/badge.svg?token=R59DMNEF1A)](https://codecov.io/gh/stefan-spittank/miro-affinity-diagram-tools)
 
 # About this miro plugin
