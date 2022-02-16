@@ -1,3 +1,6 @@
+![build](https://github.com/stefan-spittank/miro-affinity-diagram-tools/actions/workflows/nodejs.yml/badge.svg)
+[![codecov](https://codecov.io/gh/stefan-spittank/miro-affinity-diagram-tools/branch/master/graph/badge.svg?token=R59DMNEF1A)](https://codecov.io/gh/stefan-spittank/miro-affinity-diagram-tools)
+
 # About this miro plugin
 This miro plugin helps you, to import user interview protocols, to be
 able to create an affinity diagram in a shared interpretation session.
