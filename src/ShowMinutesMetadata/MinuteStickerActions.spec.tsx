@@ -11,7 +11,7 @@ describe("MinuteStickerActions", () => {
       <MinuteStickerActions
         sticker={mockMinutesSticker as SDK.IStickerWidget}
         stickerText="mock Sticker"
-        setEditMode={() => {}}
+        setEditStickerId={() => {}}
         showSetAndRestoreActions={false}
       />
     );
@@ -27,7 +27,7 @@ describe("MinuteStickerActions", () => {
       <MinuteStickerActions
         sticker={mockMinutesSticker as SDK.IStickerWidget}
         stickerText="mock Sticker"
-        setEditMode={() => {}}
+        setEditStickerId={() => {}}
         showSetAndRestoreActions={false}
       />
     );
@@ -44,7 +44,7 @@ describe("MinuteStickerActions", () => {
       <MinuteStickerActions
         sticker={mockMinutesSticker as SDK.IStickerWidget}
         stickerText="mock Sticker"
-        setEditMode={() => {}}
+        setEditStickerId={() => {}}
         showSetAndRestoreActions={true}
       />
     );
@@ -56,13 +56,13 @@ describe("MinuteStickerActions", () => {
     ).toBeVisible();
   });
 
-  it("should call setEditMode with true if the user clicks on 'Edit original note'", async () => {
-    const mockSetEditMode = jest.fn();
+  it("should call setEditStickerId with the sticker id if the user clicks on 'Edit original note'", async () => {
+    const mockSetEditStickerId = jest.fn();
     const { user } = setupUserEventAndRender(
       <MinuteStickerActions
         sticker={mockMinutesSticker as SDK.IStickerWidget}
         stickerText="mock Sticker"
-        setEditMode={mockSetEditMode}
+        setEditStickerId={mockSetEditStickerId}
         showSetAndRestoreActions={false}
       />
     );
@@ -71,7 +71,7 @@ describe("MinuteStickerActions", () => {
       screen.getByRole("button", { name: "Edit original note" })
     );
 
-    expect(mockSetEditMode).toHaveBeenCalledWith(true);
+    expect(mockSetEditStickerId).toHaveBeenCalledWith(mockMinutesSticker.id);
   });
 
   it("should show the additional actions if the user clicks on 'Show more note sticker options'", async () => {
@@ -79,7 +79,7 @@ describe("MinuteStickerActions", () => {
       <MinuteStickerActions
         sticker={mockMinutesSticker as SDK.IStickerWidget}
         stickerText="mock Sticker"
-        setEditMode={() => {}}
+        setEditStickerId={() => {}}
         showSetAndRestoreActions={true}
       />
     );
@@ -105,7 +105,7 @@ describe("MinuteStickerActions", () => {
       <MinuteStickerActions
         sticker={mockMinutesSticker as SDK.IStickerWidget}
         stickerText="mock Sticker"
-        setEditMode={() => {}}
+        setEditStickerId={() => {}}
         showSetAndRestoreActions={true}
       />
     );
@@ -133,7 +133,7 @@ describe("MinuteStickerActions", () => {
       <MinuteStickerActions
         sticker={mockMinutesSticker as SDK.IStickerWidget}
         stickerText="mock Sticker"
-        setEditMode={() => {}}
+        setEditStickerId={() => {}}
         showSetAndRestoreActions={true}
       />
     );
@@ -165,7 +165,7 @@ describe("MinuteStickerActions", () => {
       <MinuteStickerActions
         sticker={mockMinutesSticker as SDK.IStickerWidget}
         stickerText="mock Sticker"
-        setEditMode={() => {}}
+        setEditStickerId={() => {}}
         showSetAndRestoreActions={true}
       />
     );
@@ -202,7 +202,7 @@ describe("MinuteStickerActions", () => {
       <MinuteStickerActions
         sticker={mockMinutesSticker as SDK.IStickerWidget}
         stickerText="mock Sticker"
-        setEditMode={() => {}}
+        setEditStickerId={() => {}}
         showSetAndRestoreActions={true}
       />
     );

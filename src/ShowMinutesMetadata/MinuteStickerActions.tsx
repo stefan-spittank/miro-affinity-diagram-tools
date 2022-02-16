@@ -9,14 +9,14 @@ type MinuteStickerActionsProps = {
   sticker: SDK.IWidget;
   stickerText: string;
   showSetAndRestoreActions: boolean;
-  setEditMode: (show: boolean) => void;
+  setEditStickerId: (id?: string) => void;
 };
 
 const MinuteStickerActions = ({
   sticker,
   stickerText,
   showSetAndRestoreActions,
-  setEditMode,
+  setEditStickerId,
 }: MinuteStickerActionsProps) => {
   const [showActions, setShowActions] = useState(false);
   const [warningMessage, setWarningMessage] = useState<string | undefined>();
@@ -27,7 +27,7 @@ const MinuteStickerActions = ({
       <button
         title="Edit original note"
         className="button-icon button-icon-small icon-edit"
-        onClick={() => setEditMode(true)}
+        onClick={() => setEditStickerId(sticker.id)}
       />
       {showSetAndRestoreActions && (
         <button

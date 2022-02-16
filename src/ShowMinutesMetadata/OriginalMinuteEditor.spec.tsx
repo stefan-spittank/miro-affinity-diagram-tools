@@ -27,7 +27,7 @@ describe("OriginalMinuteEditor", () => {
     setupUserEventAndRender(
       <OriginalMinuteEditor
         sticker={mockMinutesSticker as SDK.IStickerWidget}
-        setEditMode={() => {}}
+        setEditStickerId={() => {}}
         originalText={mockOriginalText}
       />
     );
@@ -39,7 +39,7 @@ describe("OriginalMinuteEditor", () => {
     const { user } = setupUserEventAndRender(
       <OriginalMinuteEditor
         sticker={mockMinutesSticker as SDK.IStickerWidget}
-        setEditMode={() => {}}
+        setEditStickerId={() => {}}
         originalText={orgininalText}
       />
     );
@@ -65,7 +65,7 @@ describe("OriginalMinuteEditor", () => {
     const { user } = setupUserEventAndRender(
       <OriginalMinuteEditor
         sticker={mockMinutesSticker as SDK.IStickerWidget}
-        setEditMode={() => {}}
+        setEditStickerId={() => {}}
         originalText={orgininalText}
       />
     );
@@ -97,7 +97,7 @@ describe("OriginalMinuteEditor", () => {
       const { user } = setupUserEventAndRender(
         <OriginalMinuteEditor
           sticker={mockMinutesSticker as SDK.IStickerWidget}
-          setEditMode={() => {}}
+          setEditStickerId={() => {}}
           originalText={orgininalText}
         />
       );
@@ -129,7 +129,7 @@ describe("OriginalMinuteEditor", () => {
           sticker={
             widgetWhichTextNoLongerMatchesOriginalNote as SDK.IStickerWidget
           }
-          setEditMode={() => {}}
+          setEditStickerId={() => {}}
           originalText={orgininalText}
         />
       );
@@ -152,7 +152,7 @@ describe("OriginalMinuteEditor", () => {
     const { user } = setupUserEventAndRender(
       <OriginalMinuteEditor
         sticker={mockMinutesSticker as SDK.IStickerWidget}
-        setEditMode={() => {}}
+        setEditStickerId={() => {}}
         originalText={orgininalText}
       />
     );
@@ -167,5 +167,47 @@ describe("OriginalMinuteEditor", () => {
     textbox.blur();
 
     expect(mockMiroInst.board.widgets.update).not.toHaveBeenCalled();
+  });
+
+  it("should call setEditStickerId with undefined if the user changes the text and presses Escape", async () => {
+    const orgininalText = "original text";
+    const mockSetEditStickerId = jest.fn();
+    const { user } = setupUserEventAndRender(
+      <OriginalMinuteEditor
+        sticker={mockMinutesSticker as SDK.IStickerWidget}
+        setEditStickerId={mockSetEditStickerId}
+        originalText={orgininalText}
+      />
+    );
+
+    const textEnteredByUser = " added text";
+    const textbox = screen.getByRole("textbox");
+    await user.type(textbox, textEnteredByUser);
+    fireEvent.keyDown(textbox, {
+      key: "Escape",
+      code: "Escape",
+    });
+    textbox.blur();
+
+    expect(mockSetEditStickerId).toHaveBeenCalledWith(undefined);
+  });
+
+  it("should call setEditStickerId with undefined if the user changes the text and leaves the field", async () => {
+    const orgininalText = "original text";
+    const mockSetEditStickerId = jest.fn();
+    const { user } = setupUserEventAndRender(
+      <OriginalMinuteEditor
+        sticker={mockMinutesSticker as SDK.IStickerWidget}
+        setEditStickerId={mockSetEditStickerId}
+        originalText={orgininalText}
+      />
+    );
+
+    const textEnteredByUser = " added text";
+    const textbox = screen.getByRole("textbox");
+    await user.type(textbox, textEnteredByUser);
+    textbox.blur();
+
+    expect(mockSetEditStickerId).toHaveBeenCalledWith(undefined);
   });
 });

@@ -17,7 +17,7 @@ import OriginalMinuteEditor from "./OriginalMinuteEditor";
 
 const ShowMinutesMetadata = ({ setView }: ViewProps) => {
   const { selectedSticker } = useMiro();
-  const [editMode, setEditMode] = useState(false);
+  const [editStickerId, setEditStickerId] = useState<string | undefined>();
   return (
     <Container>
       <div className="cs1 ce12">
@@ -51,16 +51,16 @@ const ShowMinutesMetadata = ({ setView }: ViewProps) => {
                     <MinuteStickerActions
                       stickerText={stickerText}
                       sticker={sticker}
-                      setEditMode={setEditMode}
+                      setEditStickerId={setEditStickerId}
                       showSetAndRestoreActions={textHasChanged}
                     />
                   </Wrap>
                   <Sticker data-testid={"sticker-" + sticker.id}>
-                    {editMode ? (
+                    {editStickerId === sticker.id ? (
                       <OriginalMinuteEditor
                         sticker={sticker as SDK.IStickerWidget}
                         originalText={originalText}
-                        setEditMode={setEditMode}
+                        setEditStickerId={setEditStickerId}
                       />
                     ) : (
                       wordsInOriginal.map((word: string, i: number) => {
