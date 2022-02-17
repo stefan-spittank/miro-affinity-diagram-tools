@@ -32,7 +32,6 @@ const CreateRandomStacks = ({ setView }: ViewProps) => {
       numberOfParticipants,
       maxNumberOfStickers
     );
-    console.log("Stacks", stacks);
     const viewport = await miroInstance.board.viewport.get();
 
     const startY = viewport.y + widgetSize / 2;
@@ -43,7 +42,6 @@ const CreateRandomStacks = ({ setView }: ViewProps) => {
       startX,
       startY
     );
-    console.log("stickersToUpdate", stickersToUpdate);
     const updatedSticker = await miroInstance.board.widgets.update(
       stickersToUpdate
     );
