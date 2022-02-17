@@ -55,7 +55,12 @@ const ShowMinutesMetadata = ({ setView }: ViewProps) => {
                       showSetAndRestoreActions={textHasChanged}
                     />
                   </Wrap>
-                  <Sticker data-testid={"sticker-" + sticker.id}>
+                  <Sticker
+                    data-testid={"sticker-" + sticker.id}
+                    onDoubleClick={() => {
+                      setEditStickerId(sticker.id);
+                    }}
+                  >
                     {editStickerId === sticker.id ? (
                       <OriginalMinuteEditor
                         sticker={sticker as SDK.IStickerWidget}
