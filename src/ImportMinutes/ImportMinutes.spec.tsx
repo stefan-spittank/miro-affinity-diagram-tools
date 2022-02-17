@@ -105,7 +105,9 @@ describe("ImportMinutes", () => {
   it("should not create any widgets without minutes", async () => {
     const { user } = setupUserEventAndRender(<ImportMinutes />);
 
-    const createButton = screen.getByRole("button", { name: "Create sticker" });
+    const createButton = screen.getByRole("button", {
+      name: "Create stickers",
+    });
     await user.click(createButton);
 
     expect(createButton).toBeDisabled();
@@ -118,7 +120,7 @@ describe("ImportMinutes", () => {
     const testProtocolLines = ["First line", "Second line", "Third line"];
     screen.getByLabelText("Paste the minutes below").focus();
     await user.paste(testProtocolLines.join("\n"));
-    await user.click(screen.getByRole("button", { name: "Create sticker" }));
+    await user.click(screen.getByRole("button", { name: "Create stickers" }));
 
     expect(mockMiroInst.board.widgets.create).toHaveBeenCalledWith(
       testProtocolLines.map((line) =>
@@ -140,7 +142,7 @@ describe("ImportMinutes", () => {
     const testProtocolLines = ["First line", "Second line", "Third line"];
     screen.getByLabelText("Paste the minutes below").focus();
     await user.paste(testProtocolLines.join("\n"));
-    await user.click(screen.getByRole("button", { name: "Create sticker" }));
+    await user.click(screen.getByRole("button", { name: "Create stickers" }));
 
     expect(mockMiroInst.showErrorNotification).toHaveBeenCalledWith(
       "Could not create widgets. Error: Forbidden"
@@ -153,7 +155,7 @@ describe("ImportMinutes", () => {
     const testProtocolLines = ["First line", "", "Third line"];
     screen.getByLabelText("Paste the minutes below").focus();
     await user.paste(testProtocolLines.join("\n"));
-    await user.click(screen.getByRole("button", { name: "Create sticker" }));
+    await user.click(screen.getByRole("button", { name: "Create stickers" }));
 
     expect(mockMiroInst.board.widgets.create).not.toHaveBeenCalledWith(
       expect.arrayContaining([
@@ -173,7 +175,7 @@ describe("ImportMinutes", () => {
     await user.paste(testProtocolLines.join("\n"));
     const metaData = "SSP-IVE";
     await user.type(screen.getByLabelText("User Code (optional)"), metaData);
-    await user.click(screen.getByRole("button", { name: "Create sticker" }));
+    await user.click(screen.getByRole("button", { name: "Create stickers" }));
 
     expect(mockMiroInst.board.widgets.create).toHaveBeenCalledWith(
       testProtocolLines.map((line, index) =>
@@ -199,7 +201,7 @@ describe("ImportMinutes", () => {
 
     const metaData = "SSP-IVE";
     await user.type(screen.getByLabelText("User Code (optional)"), metaData);
-    await user.click(screen.getByRole("button", { name: "Create sticker" }));
+    await user.click(screen.getByRole("button", { name: "Create stickers" }));
 
     expect(mockMiroInst.board.tags.create).toHaveBeenCalledWith({
       title: metaData,
@@ -229,7 +231,7 @@ describe("ImportMinutes", () => {
     await user.paste(testProtocolLines.join("\n"));
 
     await user.type(screen.getByLabelText("User Code (optional)"), metaData);
-    await user.click(screen.getByRole("button", { name: "Create sticker" }));
+    await user.click(screen.getByRole("button", { name: "Create stickers" }));
 
     expect(mockMiroInst.board.tags.create).not.toHaveBeenCalledWith();
     expect(mockMiroInst.board.tags.update).toHaveBeenCalledWith({
@@ -251,7 +253,7 @@ describe("ImportMinutes", () => {
     screen.getByLabelText("Paste the minutes below").focus();
     await user.paste(testProtocolLines.join("\n"));
 
-    await user.click(screen.getByRole("button", { name: "Create sticker" }));
+    await user.click(screen.getByRole("button", { name: "Create stickers" }));
 
     expect(mockMiroInst.board.selection.selectWidgets).toHaveBeenCalledWith(
       testProtocolLines.map((_, index) =>

@@ -1,7 +1,13 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { appId } from "../sharedConsts";
-import { Container, Preview, Minutes, Sticker } from "./ImportMinutes.styles";
+import {
+  Container,
+  Preview,
+  Minutes,
+  Sticker,
+  PreviewSticker,
+} from "./ImportMinutes.styles";
 import { getEntryReferenceString } from "./ImportMinutes.helper";
 import { getMiroInstance } from "../miroInstance";
 import { widgetSize } from "../Tools/interviewStickerTools";
@@ -129,14 +135,14 @@ const ImportMinutes = () => {
           }}
         />
       </Minutes>
-      <h2>Preview</h2>
+      <h2>Preview {lines.length > 0 ? `(${lines.length} stickers)` : ""}</h2>
       <Preview>
         {lines.length > 0 ? (
           lines.map((line, index) => (
-            <div key={index}>
+            <PreviewSticker key={index}>
               <strong>{getEntryReferenceString(index, metaData)}</strong>
               <Sticker>{line}</Sticker>
-            </div>
+            </PreviewSticker>
           ))
         ) : (
           <div>No content</div>
@@ -150,7 +156,7 @@ const ImportMinutes = () => {
         disabled={isCreating || lines.length < 1}
         type="button"
       >
-        Create sticker
+        Create stickers
       </button>
       <button
         className="button button-secondary"
