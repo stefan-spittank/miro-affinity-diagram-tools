@@ -51,7 +51,7 @@ const CreateRandomStacks = ({ setView }: ViewProps) => {
     if (newViewport) {
       await miroInstance.board.viewport.set(newViewport);
     }
-    await miroInstance.board.ui.closeLeftSidebar();
+    //await miroInstance.board.ui.closeLeftSidebar();
   };
 
   return (
