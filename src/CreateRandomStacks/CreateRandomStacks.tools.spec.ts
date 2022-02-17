@@ -160,6 +160,68 @@ describe("updateStickerPositionsForGivenStacks", () => {
     );
   });
 
+  it("should have enough space between stacks even if the last stack has fewer columns", () => {
+    const widget1_1 = { id: "1_1", x: 0, y: 0 };
+    const widget1_2 = { id: "1_2", x: 454350, y: -4355430 };
+    const widget1_3 = { id: "1_3", x: 0, y: 4353450 };
+    const widget2_1 = { id: "2_1", x: 435430, y: 450 };
+    const widget2_2 = { id: "2_2", x: 45430, y: 4350 };
+    const widget2_3 = { id: "2_3", x: 4330, y: 40 };
+    const widget3_1 = { id: "3_1", x: 5430, y: 1450 };
+    const widget3_2 = { id: "3_2", x: -43430, y: 43450 };
+
+    const updatedWidgets = updateStickerPositionsForGivenStacks(
+      [
+        {
+          elements: [widget1_1, widget1_2, widget1_3] as SDK.IStickerWidget[],
+        },
+        {
+          elements: [widget2_1, widget2_2, widget2_3] as SDK.IStickerWidget[],
+        },
+        {
+          elements: [widget3_1, widget3_2] as SDK.IStickerWidget[],
+        },
+      ],
+      0,
+      0
+    );
+    const updatedWidget1_1 = updatedWidgets.find((w) => w.id === widget1_1.id)!;
+    const updatedWidget1_2 = updatedWidgets.find((w) => w.id === widget1_2.id)!;
+    const updatedWidget1_3 = updatedWidgets.find((w) => w.id === widget1_3.id)!;
+    const updatedWidget2_1 = updatedWidgets.find((w) => w.id === widget2_1.id)!;
+    const updatedWidget2_2 = updatedWidgets.find((w) => w.id === widget2_2.id)!;
+    const updatedWidget2_3 = updatedWidgets.find((w) => w.id === widget2_3.id)!;
+    const updatedWidget3_1 = updatedWidgets.find((w) => w.id === widget3_1.id)!;
+    const updatedWidget3_2 = updatedWidgets.find((w) => w.id === widget3_2.id)!;
+
+    const spaceBetweenStacks = widgetSize;
+    const offsetForStack2 = 2 * widgetSize + spaceBetweenStacks;
+    const offsetForStack3 = 4 * widgetSize + 2 * spaceBetweenStacks;
+
+    expect(updatedWidget1_1).toEqual(expect.objectContaining({ x: 0, y: 0 }));
+    expect(updatedWidget1_2).toEqual(
+      expect.objectContaining({ x: widgetSize, y: 0 })
+    );
+    expect(updatedWidget1_3).toEqual(
+      expect.objectContaining({ x: 0, y: widgetSize })
+    );
+    expect(updatedWidget2_1).toEqual(
+      expect.objectContaining({ x: offsetForStack2, y: 0 })
+    );
+    expect(updatedWidget2_2).toEqual(
+      expect.objectContaining({ x: offsetForStack2 + widgetSize, y: 0 })
+    );
+    expect(updatedWidget2_3).toEqual(
+      expect.objectContaining({ x: offsetForStack2, y: widgetSize })
+    );
+    expect(updatedWidget3_1).toEqual(
+      expect.objectContaining({ x: offsetForStack3, y: 0 })
+    );
+    expect(updatedWidget3_2).toEqual(
+      expect.objectContaining({ x: offsetForStack3 + widgetSize, y: 0 })
+    );
+  });
+
   it("should create two visual group of 1 row for two stack containing 2 elements each", () => {
     const widget1_1 = { id: "1_1", x: 0, y: 0 };
     const widget1_2 = { id: "1_2", x: 454350, y: -4355430 };

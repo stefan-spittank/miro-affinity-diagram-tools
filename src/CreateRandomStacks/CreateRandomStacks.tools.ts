@@ -45,12 +45,21 @@ export const updateStickerPositionsForGivenStacks = (
   stacks: ArrayStack<SDK.IStickerWidget>[],
   startX: number,
   startY: number
-) =>
-  stacks.flatMap((stack, stackNo) => {
+) => {
+  const overallNumberOfStickers = stacks.reduce((acc, curr) => {
+    return acc + curr.elements.length;
+  }, 0);
+  const maxNoOfStickersPerStack = Math.ceil(
+    overallNumberOfStickers / stacks.length
+  );
+
+  const maxColumnsOfStacks = Math.ceil(Math.sqrt(maxNoOfStickersPerStack));
+  return stacks.flatMap((stack, stackNo) => {
     const columns = Math.ceil(Math.sqrt(stack.elements.length));
     const offsetsBetweenStacks = stackNo * widgetSize;
-    const offsetForColumnsOfStacks = columns * stackNo * widgetSize;
-    const stackOffset = offsetForColumnsOfStacks + offsetsBetweenStacks;
+    const offsetForColumnsOfPreviousStacks =
+      maxColumnsOfStacks * stackNo * widgetSize;
+    const stackOffset = offsetForColumnsOfPreviousStacks + offsetsBetweenStacks;
 
     return stack.elements.map((sticker, stickerNo) => {
       const column = Math.floor(stickerNo / columns);
@@ -63,3 +72,4 @@ export const updateStickerPositionsForGivenStacks = (
       };
     });
   });
+};

@@ -77,6 +77,7 @@ describe("CreateRandomStacks", () => {
         mockMinutesSticker,
         mockMinutesSticker2,
       ] as SDK.IStickerWidget[],
+      refreshSticker: () => Promise.resolve(),
     });
     setupUserEventAndRender(<CreateRandomStacks setView={() => {}} />);
     expect(
@@ -87,6 +88,7 @@ describe("CreateRandomStacks", () => {
   it("should disable the 'Create random stacks' button with an explaining label if there are no note stickers selected", async () => {
     jest.spyOn(MiroProviderModule, "useMiro").mockReturnValue({
       selectedSticker: [],
+      refreshSticker: () => Promise.resolve(),
     });
     setupUserEventAndRender(<CreateRandomStacks setView={() => {}} />);
 
@@ -101,6 +103,7 @@ describe("CreateRandomStacks", () => {
   it("should enable the 'Create random stacks' button if there are note stickers selected", async () => {
     jest.spyOn(MiroProviderModule, "useMiro").mockReturnValue({
       selectedSticker: [mockMinutesSticker2] as SDK.IStickerWidget[],
+      refreshSticker: () => Promise.resolve(),
     });
     setupUserEventAndRender(<CreateRandomStacks setView={() => {}} />);
 
@@ -166,6 +169,7 @@ describe("CreateRandomStacks", () => {
     const stickers = getMockProtocolStickers(6) as SDK.IStickerWidget[];
     jest.spyOn(MiroProviderModule, "useMiro").mockReturnValue({
       selectedSticker: stickers,
+      refreshSticker: () => Promise.resolve(),
     });
     const { user } = setupUserEventAndRender(
       <CreateRandomStacks setView={() => {}} />
