@@ -1,5 +1,9 @@
 name: Deployment
 
+permissions:
+  id-token: write
+  contents: read
+
 on:
   push:
     branches: [ master ]
@@ -15,6 +19,11 @@ jobs:
         node-version: [16.x]
 
     steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: eu-central-1
+          role-to-assume: arn:aws:iam::776996420207:role/GitHubActions
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
@@ -26,11 +35,13 @@ jobs:
       - name: Setup project
         run: yarn install --frozen-lockfile
 
-      - name: Deploy with gh-pages
-        run: |
-          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-          yarn deploy -- -u "github-actions-bot <support+actions@github.com>"
+      - name: Build project
+        run: yarn build
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VITE_MIRO_APP_ID: ${{ secrets.VITE_MIRO_APP_ID }}
+
+      - name: Deploy to AWS
+        run: aws s3 sync --delete . s3://miro-affinity-tools-776996420207-eu-central-1
+        working-directory: dist
+
 
