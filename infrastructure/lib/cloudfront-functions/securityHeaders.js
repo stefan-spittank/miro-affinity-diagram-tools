@@ -9,7 +9,7 @@ function handler(event) {
   };
   headers["content-security-policy"] = {
     value:
-      "default-src 'self'; img-src 'self'; script-src 'self' https://miro.com/*; style-src 'self'; object-src 'none'; frame-ancestors 'self' miro.com *.miro.com ;",
+      "default-src 'self'; img-src 'self'; script-src 'self' https://miro.com/app/static/sdk.1.1.js; style-src 'self'; object-src 'none'; frame-ancestors 'self' miro.com *.miro.com ;",
   };
   headers["x-content-type-options"] = { value: "nosniff" };
   headers["x-frame-options"] = { value: "deny" };
