@@ -17,8 +17,6 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version-file: ".nvmrc"
-          cache: "yarn"
-          cache-dependency-path: infrastructure/yarn.lock
       - run: yarn install --frozen-lockfile
         working-directory: infrastructure
       - name: Configure AWS credentials
@@ -32,7 +30,7 @@ jobs:
         working-directory: infrastructure
 
   deploy:
-
+    needs: infrastructure-deployment
     runs-on: ubuntu-latest
 
     strategy:
