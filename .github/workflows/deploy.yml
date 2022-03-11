@@ -10,6 +10,27 @@ on:
 
 jobs:
 
+  infrastructure-deployment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version-file: ".nvmrc"
+          cache: "yarn"
+          cache-dependency-path: infrastructure/yarn.lock
+      - run: yarn install --frozen-lockfile
+        working-directory: infrastructure
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: eu-central-1
+          role-to-assume: arn:aws:iam::776996420207:role/GitHubActions
+      - run: |
+          yarn cdk bootstrap
+          yarn cdk deploy --require-approval never
+        working-directory: infrastructure
+
   deploy:
 
     runs-on: ubuntu-latest
