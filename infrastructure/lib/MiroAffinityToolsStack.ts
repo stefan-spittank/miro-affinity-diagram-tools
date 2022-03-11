@@ -8,6 +8,7 @@ import {
   ViewerProtocolPolicy,
 } from "aws-cdk-lib/aws-cloudfront";
 import { HostedZone } from "aws-cdk-lib/aws-route53";
+import { DnsValidatedCertificate } from "aws-cdk-lib/aws-certificatemanager";
 
 export class MiroAffinityToolsStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -34,13 +35,21 @@ export class MiroAffinityToolsStack extends Stack {
     const myHostedZone = new HostedZone(this, "MiroAffinityToolsZone", {
       zoneName: "miro-affinity-tools.codecentric.io",
     });
-    // new acm.Certificate(this, 'MiroAffinityToolsCertificate', {
-    //   domainName: 'miro-affinity-tools.codecentric.io',
-    //   validation: acm.CertificateValidation.fromDns(myHostedZone),
-    // });
+
+    const certificate = new DnsValidatedCertificate(
+      this,
+      "MiroAffinityToolsCertificate",
+      {
+        domainName: "miro-affinity-tools.codecentric.io",
+        hostedZone: myHostedZone,
+        region: "us-east-1",
+      }
+    );
 
     new cloudfront.Distribution(this, "MiroAffinityToolsDistribution", {
       defaultRootObject: "index.html",
+      domainNames: ["miro-affinity-tools.codecentric.io"],
+      certificate,
       defaultBehavior: {
         cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
         origin: new S3Origin(pluginBucket),
