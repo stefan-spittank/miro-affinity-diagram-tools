@@ -19,11 +19,27 @@ export class MiroAffinityToolsStack extends Stack {
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
     });
 
+    const cloudFrontSecurityHeadersFunction = new cloudfront.Function(
+      this,
+      "CloudFrontSecurityHeadersFunction",
+      {
+        code: cloudfront.FunctionCode.fromFile({
+          filePath: "./lib/cloudfront-functions/securityHeaders.js",
+        }),
+      }
+    );
+
     new cloudfront.Distribution(this, "MiroAffinityToolsDistribution", {
       defaultRootObject: "index.html",
       defaultBehavior: {
         cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
         origin: new S3Origin(pluginBucket),
+        functionAssociations: [
+          {
+            function: cloudFrontSecurityHeadersFunction,
+            eventType: cloudfront.FunctionEventType.VIEWER_RESPONSE,
+          },
+        ],
         viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       },
       minimumProtocolVersion: SecurityPolicyProtocol.TLS_V1_2_2021,

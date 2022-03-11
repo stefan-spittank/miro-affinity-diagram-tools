@@ -1,7 +1,7 @@
 {
   "version": "16.0.0",
   "files": {
-    "49570f8f97ca2b2cd8485e7b242ffd1bd2553bef7d9f8f9974b79d249c00a77c": {
+    "9ac141b120befef5c97bdf681c4e292e18ceefb6ba53dcffdf09db0295aa9b5e": {
       "source": {
         "path": "MiroAffinityToolsStack.template.json",
         "packaging": "file"
@@ -9,7 +9,7 @@
       "destinations": {
         "current_account-current_region": {
           "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
-          "objectKey": "49570f8f97ca2b2cd8485e7b242ffd1bd2553bef7d9f8f9974b79d249c00a77c.json",
+          "objectKey": "9ac141b120befef5c97bdf681c4e292e18ceefb6ba53dcffdf09db0295aa9b5e.json",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
         }
       }

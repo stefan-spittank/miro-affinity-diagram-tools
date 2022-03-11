@@ -82,6 +82,41 @@
         "aws:cdk:path": "MiroAffinityToolsStack/MiroAffinityToolsBucket/Policy/Resource"
       }
     },
+    "CloudFrontSecurityHeadersFunction4CE8363E": {
+      "Type": "AWS::CloudFront::Function",
+      "Properties": {
+        "Name": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "AWS::Region"
+              },
+              "MiroAffintSecurityHeadersFunction02938E68"
+            ]
+          ]
+        },
+        "AutoPublish": true,
+        "FunctionCode": "function handler(event) {\n  var response = event.response;\n  var headers = response.headers;\n\n  // Set HTTP security headers\n  // Since JavaScript doesn't allow for hyphens in variable names, we use the dict[\"key\"] notation\n  headers[\"strict-transport-security\"] = {\n    value: \"max-age=31536000; includeSubdomains; preload\",\n  };\n  headers[\"content-security-policy\"] = {\n    value:\n      \"default-src 'self'; img-src 'self'; script-src 'self' https://miro.com/*; style-src 'self'; object-src 'none'; frame-ancestors 'self' miro.com *.miro.com ;\",\n  };\n  headers[\"x-content-type-options\"] = { value: \"nosniff\" };\n  headers[\"x-frame-options\"] = { value: \"deny\" };\n  headers[\"x-xss-protection\"] = { value: \"1; mode=block\" };\n  headers[\"referrer-policy\"] = { value: \"same-origin\" };\n\n  // Return the response to viewers\n  return response;\n}\n",
+        "FunctionConfig": {
+          "Comment": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "MiroAffintSecurityHeadersFunction02938E68"
+              ]
+            ]
+          },
+          "Runtime": "cloudfront-js-1.0"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "MiroAffinityToolsStack/CloudFrontSecurityHeadersFunction/Resource"
+      }
+    },
     "MiroAffinityToolsDistributionOrigin1S3OriginC421B15F": {
       "Type": "AWS::CloudFront::CloudFrontOriginAccessIdentity",
       "Properties": {
@@ -100,6 +135,17 @@
           "DefaultCacheBehavior": {
             "CachePolicyId": "4135ea2d-6df8-44a3-9df3-4b5a84be39ad",
             "Compress": true,
+            "FunctionAssociations": [
+              {
+                "EventType": "viewer-response",
+                "FunctionARN": {
+                  "Fn::GetAtt": [
+                    "CloudFrontSecurityHeadersFunction4CE8363E",
+                    "FunctionARN"
+                  ]
+                }
+              }
+            ],
             "TargetOriginId": "MiroAffinityToolsStackMiroAffinityToolsDistributionOrigin1D8F8109F",
             "ViewerProtocolPolicy": "redirect-to-https"
           },
@@ -140,7 +186,7 @@
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/3WPzQrCQAyEn8X7Nv4UvWtF8KTUB5A2u5W0dRc2WUWWvrv9EfTiaZJJvoFZwXINi1nx5AR1k7RUQrxIgY3qrWvkFOIuYGNEZZX9TJOcXUv4+trT3ilsXdCVd1Yg7onFUxmEnFUnTzeyW0TDfNTGCsmIZwNwGIB/H78xXTc4uWEXPJqRd1bTeFLWaQM1zx/LDaR9rZqJEh/6oLuBfNI31/CX8PIAAAA="
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/3WPzQrCMBCEn8V7uv4UvWul4EmpDyDtJpVtawLZRJHQd7dNRb142pnZ2Q92Bcs1LGblgxOUbdJRBeHsSmzFEF0CpxB2HlvlRFbrt5rGyXSEz288+V5gZ7ysrdEOQu41OjJ6bH30nthZqnw0R0tX0ltExXyQSjtykZmNlHyk/Gv8Yvp+TArFxltU8d5oSXEltJEKGp7flxtIh18bJkqsH0A3BcU0XyOs3skHAQAA"
       },
       "Metadata": {
         "aws:cdk:path": "MiroAffinityToolsStack/CDKMetadata/Default"
