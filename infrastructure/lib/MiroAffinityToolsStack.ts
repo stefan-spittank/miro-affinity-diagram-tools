@@ -7,6 +7,7 @@ import {
   SecurityPolicyProtocol,
   ViewerProtocolPolicy,
 } from "aws-cdk-lib/aws-cloudfront";
+import { HostedZone } from "aws-cdk-lib/aws-route53";
 
 export class MiroAffinityToolsStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -29,6 +30,14 @@ export class MiroAffinityToolsStack extends Stack {
         }),
       }
     );
+
+    const myHostedZone = new HostedZone(this, "MiroAffinityToolsZone", {
+      zoneName: "miro-affinity-tools.codecentric.io",
+    });
+    // new acm.Certificate(this, 'MiroAffinityToolsCertificate', {
+    //   domainName: 'miro-affinity-tools.codecentric.io',
+    //   validation: acm.CertificateValidation.fromDns(myHostedZone),
+    // });
 
     new cloudfront.Distribution(this, "MiroAffinityToolsDistribution", {
       defaultRootObject: "index.html",
