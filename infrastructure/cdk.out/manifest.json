@@ -1,0 +1,94 @@
+{
+  "version": "16.0.0",
+  "artifacts": {
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    },
+    "MiroAffinityToolsStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "MiroAffinityToolsStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "MiroAffinityToolsStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "MiroAffinityToolsStack.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/49570f8f97ca2b2cd8485e7b242ffd1bd2553bef7d9f8f9974b79d249c00a77c.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "MiroAffinityToolsStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "MiroAffinityToolsStack.assets"
+      ],
+      "metadata": {
+        "/MiroAffinityToolsStack/MiroAffinityToolsBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MiroAffinityToolsBucket2BE24FE8"
+          }
+        ],
+        "/MiroAffinityToolsStack/MiroAffinityToolsBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MiroAffinityToolsBucketPolicy86B5F73B"
+          }
+        ],
+        "/MiroAffinityToolsStack/MiroAffinityToolsDistribution/Origin1/S3Origin/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MiroAffinityToolsDistributionOrigin1S3OriginC421B15F"
+          }
+        ],
+        "/MiroAffinityToolsStack/MiroAffinityToolsDistribution/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MiroAffinityToolsDistribution2A8758CB"
+          }
+        ],
+        "/MiroAffinityToolsStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/MiroAffinityToolsStack/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/MiroAffinityToolsStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/MiroAffinityToolsStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "MiroAffinityToolsStack"
+    }
+  }
+}
