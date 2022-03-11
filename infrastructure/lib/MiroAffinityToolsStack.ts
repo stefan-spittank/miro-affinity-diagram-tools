@@ -23,6 +23,7 @@ export class MiroAffinityToolsStack extends Stack {
       this,
       "CloudFrontSecurityHeadersFunction",
       {
+        functionName: `${this.region}-CFSecurityHeaders`,
         code: cloudfront.FunctionCode.fromFile({
           filePath: "./lib/cloudfront-functions/securityHeaders.js",
         }),
